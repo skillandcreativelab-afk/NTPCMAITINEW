@@ -1,0 +1,8 @@
+@import "tailwindcss";
+@plugin "daisyui";
+.kaushal{
+    height: 80px;
+    width: 400px;
+   
+}
+
