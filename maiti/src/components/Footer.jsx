@@ -46,7 +46,7 @@ function Footer() {
             <li className="flex items-center gap-2"><FaEnvelope /> info@ntpcsite.com</li>
           </ul>
           <div className="flex gap-4">
-            <a href="#" aria-label="Facebook" className="p-2 bg-gray-800 rounded-full hover:bg-blue-600 transition">
+            <a href="https://www.facebook.com/share/1FbaaK7ZD4/" aria-label="Facebook" className="p-2 bg-gray-800 rounded-full hover:bg-blue-600 transition">
               <FaFacebookF />
             </a>
             <a href="#" aria-label="Twitter" className="p-2 bg-gray-800 rounded-full hover:bg-blue-400 transition">
@@ -55,7 +55,7 @@ function Footer() {
             <a href="#" aria-label="LinkedIn" className="p-2 bg-gray-800 rounded-full hover:bg-blue-700 transition">
               <FaLinkedinIn />
             </a>
-            <a href="#" aria-label="Instagram" className="p-2 bg-gray-800 rounded-full hover:bg-pink-500 transition">
+            <a href="https://www.instagram.com/ntpc_maiti/" aria-label="Instagram" className="p-2 bg-gray-800 rounded-full hover:bg-pink-500 transition">
               <FaInstagram />
             </a>
           </div>

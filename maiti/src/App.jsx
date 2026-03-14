@@ -26,6 +26,7 @@ import Placement from "./components/Trainees_folder/Placement";
 import Achievements from "./components/Trainees_folder/Achievements";
 import AdminPage from "./components/AdminPage";
 import Footer from "./components/Footer";
+import Istdpdf from "./components/Istdpdf";
 
 
 
@@ -63,6 +64,10 @@ function App() {
           <Route path="/trainees/placement" element={<Placement />} />
           <Route path="/trainees/achievements" element={<Achievements />} />
           <Route path="/trainees/adminpage" element={<AdminPage />} />
+
+          {/* ...................................for pdf.......................... */}
+          <Route path="/Istdpdf" element={<Istdpdf/>} />
+          
         </Routes>
             
       </div>

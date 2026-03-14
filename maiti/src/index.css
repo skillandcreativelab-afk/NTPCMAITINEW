@@ -1,8 +1,10 @@
 @import "tailwindcss";
 @plugin "daisyui";
 .kaushal{
-    height: 80px;
+    height: 100px;
     width: 400px;
+    background-color: rgb(249, 252, 249);
+    border-radius: 1%;
    
 }
 
