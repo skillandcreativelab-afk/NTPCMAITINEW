@@ -16,7 +16,7 @@ function Istdpdf() {
       {/* Page 2 */}
       <div className="bg-white shadow-lg w-[794px] h-[1123px] p-2 border">
         <img
-          src="/ISTD/ISTD  National Conference 2026 Brochure_page-0002.jpg"
+          src="ISTD\ISTD  National Conference 2026 Brochure_page-0002.jpg"
           alt="A4 Brochure"
           className="w-full h-full object-contain"
         />
