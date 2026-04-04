@@ -1,592 +1,857 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { FaExternalLinkAlt, FaBullhorn } from "react-icons/fa";
-
+import {
+  FaExternalLinkAlt,
+  FaBullhorn,
+  FaArrowRight,
+  FaRocket,
+  FaGlobeAmericas,
+  FaGraduationCap,
+  FaQuoteLeft,
+  FaLaptopCode,
+} from "react-icons/fa";
+import { motion } from "framer-motion";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
 function Home() {
-  const [showViceFull, setShowViceFull] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  const [showMore, setShowMore] = useState(false); // Vision toggle state
+
   const slides = [
-    "https://fampay.in/blog/content/images/2021/09/image-17.png",
-    "https://indiaeducation.net/wp-content/uploads/2023/08/Untitled-design-7-1024x768.jpg",
-    "https://wallpaperaccess.com/full/8066764.jpg",
+    "/home slide pic/building.jpeg",
+    "/home slide pic/main building.jpeg",
+    "/home slide pic/welder.jpeg",
   ];
 
-  // Auto-play effect
-  // AOS animation
-useEffect(() => {
-  AOS.init({ duration: 1000 });
-}, []);
+  const notices = [
+    "Second Merit List for 2026 is Out! Check now.",
+    "Annual Sports Meet starting from next Monday.",
+    "Placement Drive: NTPC Apprentice hiring soon.",
+    "Workshop Maintenance: Labs closed this Sunday.",
+    "New AI Course modules added to Fitter Trade.",
+    "Uniform and ID Card distribution in Admin Block.",
+    "Scholarship portal e-Kalyan is now active.",
+  ];
 
-// Auto carousel
-useEffect(() => {
-  const interval = setInterval(() => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
-  }, 3000);
+  useEffect(() => {
+    AOS.init({
+      duration: 1200,
+      once: false,
+      offset: 120,
+      easing: "ease-out-quart",
+    });
 
-  return () => clearInterval(interval);
-}, [slides.length]);
+    const timer = setTimeout(() => setShowModal(true), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [slides.length]);
 
   return (
-    <section className="">
-      <div className="bg-[#FFDAB9] py-3">
-        <marquee
-          behavior="scroll"
-          direction="left"
-          scrollamount="8"
-          className="text-2xl font-bold text-[#800000] tracking-wide"
+    <section className="bg-[#f8fafc] overflow-hidden font-sans w-full">
+      {/* CSS for Vertical Marquee Animation */}
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+        @keyframes marquee-vertical {
+          0% { transform: translateY(0); }
+          100% { transform: translateY(-50%); }
+        }
+        .animate-vertical {
+          animation: marquee-vertical 15s linear infinite;
+        }
+        .animate-vertical:hover {
+          animation-play-state: paused;
+        }
+        @keyframes marquee-horizontal {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+          display: flex;
+          width: 200%;
+          animation: marquee-horizontal 20s linear infinite;
+        }
+      `,
+        }}
+      />
+
+      {/* --- Admission Popup --- */}
+      {showModal && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm"
         >
-          Welcome to NTPC MINING AND INDUSTRIAL TRAINING INSTITUTE | DHENGA
-          BARKAGAON 825311 ✨
-        </marquee>
+          <motion.div
+            initial={{ scale: 0.9, y: 50 }}
+            animate={{ scale: 1, y: 0 }}
+            className="relative bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-blue-100"
+          >
+            <button
+              onClick={() => setShowModal(false)}
+              className="absolute top-4 right-4 bg-slate-100 hover:bg-red-500 hover:text-white text-slate-500 p-2 rounded-full transition-all z-10"
+            >
+              ✕
+            </button>
+            <div className="bg-gradient-to-br from-blue-700 to-blue-900 p-8 text-center text-white">
+              <h2 className="text-2xl font-black uppercase tracking-tight mb-2">
+                नामांकन सूचना 2026
+              </h2>
+              <div className="inline-block px-4 py-1 bg-yellow-400 text-blue-900 text-xs font-black rounded-full uppercase tracking-widest">
+                Admission Open
+              </div>
+            </div>
+            <div className="p-8 text-center">
+              <p className="text-slate-600 text-lg font-medium mb-6">
+                NTPC MAITI में{" "}
+                <span className="text-blue-600 font-bold underline decoration-2">
+                  फिटर, इलेक्ट्रीशियन एवं वेल्डर
+                </span>{" "}
+                के आवेदन आमंत्रित हैं।
+              </p>
+              <Link
+                to="/Apply"
+                onClick={() => setShowModal(false)}
+                className="flex items-center justify-center gap-3 bg-blue-600 hover:bg-blue-700 text-white py-4 px-8 rounded-xl shadow-xl transition-all text-xl font-bold"
+              >
+                अभी आवेदन करें <FaArrowRight />
+              </Link>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+
+      {/* --- Hero Section --- */}
+      <div className="relative w-full h-[400px] md:h-[650px] overflow-hidden shadow-lg">
+        {slides.map((s, i) => (
+          <div
+            key={i}
+            className={`absolute inset-0 transition-all duration-1000 ease-in-out ${i === currentSlide ? "opacity-100 scale-100" : "opacity-0 scale-105"}`}
+          >
+            <img src={s} alt="Slide" className="w-full h-full object-cover" />
+
+            <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-slate-900/30 to-transparent flex items-center px-6 md:px-20">
+              <div className="text-white max-w-3xl" data-aos="fade-right">
+                <span className="bg-red-600 px-5 py-1.5 rounded-full text-xs font-black uppercase tracking-widest mb-6 inline-block">
+                  Govt. Certified ITI
+                </span>
+
+                <h1 className="text-4xl md:text-7xl font-black mb-6 leading-tight uppercase italic tracking-tighter">
+                  Skill India <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-400">
+                    Mission.
+                  </span>
+                </h1>
+                <p className="text-lg md:text-xl text-slate-200 mb-8 max-w-xl font-medium">
+                  Empowering youth with industry-ready technical skills at NTPC
+                  Barkagaon.
+                </p>
+                <div className="flex gap-4">
+                  <Link
+                    to="/Apply"
+                    className="bg-blue-600 hover:bg-white hover:text-blue-900 px-8 py-4 rounded-xl font-bold transition-all shadow-xl"
+                  >
+                    {" "}
+                    Apply Now{" "}
+                  </Link>
+                  <Link
+                    to="/About"
+                    className="bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 px-8 py-4 rounded-xl font-bold transition-all"
+                  >
+                    {" "}
+                    Learn More{" "}
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
 
-      {/* Carousel */}
-      <div className="relative w-full rounded-lg shadow-lg mb-6">
-        <img
-          src={slides[currentSlide]}
-          alt={`Slide ${currentSlide + 1}`}
-          className="w-full h-96 object-cover rounded-lg"
-        />
+      {/* --- Horizontal Marquee --- */}
+      <div className="bg-blue-950 py-4 overflow-hidden border-y border-white/10">
+        <div className="animate-marquee text-lg font-bold text-white flex gap-20">
+          <span className="flex items-center gap-4">
+            <span className="text-yellow-400">●</span> WELCOME TO NTPC MITI
+            BARKAGAON
+          </span>
+          <span className="flex items-center gap-4">
+            <span className="text-yellow-400">●</span> ADMISSION OPEN FOR
+            SESSION 2026-28
+          </span>
+          <span className="flex items-center gap-4">
+            <span className="text-yellow-400">●</span> TOP PLACEMENTS IN MINING
+            SECTOR
+          </span>
+        </div>
+      </div>
 
-        {/* Manual Navigation Buttons */}
-        <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-          <button
-            onClick={() =>
-              setCurrentSlide((prev) =>
-                prev === 0 ? slides.length - 1 : prev - 1,
-              )
-            }
-            className="btn btn-circle"
-          >
-            ❮
-          </button>
-          <button
-            onClick={() =>
-              setCurrentSlide((prev) => (prev + 1) % slides.length)
-            }
-            className="btn btn-circle"
-          >
-            ❯
-          </button>
+      {/* --- Job & Training Section --- */}
+      <div className="max-w-8xl mx-auto px-6 py-20 bg-gradient-to-br from-[#fff5f0] via-[#fee2e2] to-[#fecaca] border-y border-red-100 shadow-inner">
+        <div
+          className="lg:mx-[30px] mb-16 bg-white rounded-3xl py-12 px-6 border border-slate-100 shadow-[0_20px_30px_rgba(0,0,0,0.05)] hover:shadow-[0_30px_60px_rgba(1,0,1,0.1)] transition-all duration-500 text-center group"
+          data-aos="fade-up"
+        >
+          <h2 className="text-sm font-black text-blue-600 uppercase tracking-[0.4em] mb-4">
+            {" "}
+            Career Pathway{" "}
+          </h2>
+          <h3 className="text-4xl md:text-5xl font-black text-slate-800 uppercase italic tracking-tighter group-hover:text-blue-700 transition-colors">
+            {" "}
+            Job & Training Portals{" "}
+          </h3>
+          <div className="h-2 w-24 bg-red-600 mx-auto mt-6 rounded-full shadow-md group-hover:w-40 transition-all duration-500"></div>
         </div>
 
-        {/* Pagination Dots */}
-        <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-2">
-          {slides.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentSlide(index)}
-              className={`w-3 h-3 rounded-full ${
-                currentSlide === index ? "bg-blue-600" : "bg-gray-400"
-              }`}
-            ></button>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          {[
+            {
+              title: "Apprenticeship",
+              icon: <FaRocket />,
+              desc: "NAPS/NATS programs in PSUs like Railways and NTPC.",
+              headerColor: "text-blue-900",
+              iconBg: "bg-orange-50 text-orange-600",
+              accent: "bg-orange-500",
+              links: [
+                {
+                  name: "NAPS Portal",
+                  url: "https://www.apprenticeshipindia.gov.in/",
+                },
+                { name: "NATS Portal", url: "https://nats.education.gov.in/" },
+              ],
+            },
+            {
+              title: "Industrial Jobs",
+              icon: <FaGlobeAmericas />,
+              desc: "Direct placements in Mining and Power sectors.",
+              headerColor: "text-blue-900",
+              iconBg: "bg-blue-50 text-blue-600",
+              accent: "bg-blue-600",
+              links: [
+                { name: "NCS Portal", url: "https://www.ncs.gov.in/" },
+                { name: "NTPC Careers", url: "https://careers.ntpc.co.in/" },
+              ],
+            },
+            {
+              title: "Skill Upgradation",
+              icon: <FaGraduationCap />,
+              desc: "Certifications from Skill India and MSDE programs.",
+              headerColor: "text-blue-900",
+              iconBg: "bg-emerald-50 text-emerald-600",
+              accent: "bg-emerald-600",
+              links: [
+                {
+                  name: "Skill India Digital",
+                  url: "https://www.skillindiadigital.gov.in/",
+                },
+                { name: "MSDE Portal", url: "https://www.msde.gov.in/" },
+              ],
+            },
+          ].map((box, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 60 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.8, delay: i * 0.2 }}
+              whileHover={{ y: -10 }}
+              className="relative bg-white p-10 rounded-[2.5rem] shadow-[0_15px_40px_rgba(0,0,0,0.06)] border border-slate-100 hover:shadow-[0_25px_60px_rgba(200,69,0,0.8)] transition-all duration-500 flex flex-col justify-between group overflow-hidden"
+            >
+              <div>
+                <div
+                  className={`w-12 h-1.5 ${box.accent} rounded-full mb-8 opacity-60 group-hover:w-20 transition-all duration-500`}
+                ></div>
+                <div
+                  className={`w-16 h-16 rounded-2xl ${box.iconBg} flex items-center justify-center text-3xl mb-8 shadow-sm group-hover:scale-110 transition-transform duration-500`}
+                >
+                  {box.icon}
+                </div>
+                <h3
+                  className={`text-2xl font-black ${box.headerColor} mb-4 uppercase tracking-tight group-hover:text-blue-600 transition-colors`}
+                >
+                  {box.title}
+                </h3>
+                <p className="text-slate-500 font-medium mb-10 leading-relaxed">
+                  {box.desc}
+                </p>
+              </div>
+              <div className="space-y-3 relative z-10">
+                {box.links.map((link, idx) => (
+                  <a
+                    key={idx}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between p-4 rounded-xl bg-slate-50 hover:bg-blue-600 text-slate-700 hover:text-white transition-all duration-300 border border-slate-100 font-bold text-sm tracking-wide group/btn shadow-sm"
+                  >
+                    {link.name}{" "}
+                    <FaArrowRight className="text-xs group-hover/btn:translate-x-1 transition-transform" />
+                  </a>
+                ))}
+              </div>
+            </motion.div>
           ))}
         </div>
       </div>
 
-      {/* Dot Background Section with Info Boxes */}
-      <div
-        className="p-6 rounded-lg shadow-md grid grid-cols-1 md:grid-cols-3 gap-6"
-        style={{
-          backgroundImage: "radial-gradient(#1e3a8a 1px, transparent 1px)",
-          backgroundSize: "10px 10px", // dots पास-पास
-        }}
-      ></div>
-      <div className="p-6 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">
-        {/* Box 1 */}
-        <div className="bg-gradient-to-r from-blue-900 via-blue-800 to-blue-900 p-6 rounded-xl shadow-lg text-white transform hover:-translate-y-2 hover:shadow-2xl transition duration-300 cursor-pointer">
-          <h3 className="text-xl font-bold mb-3">About Us</h3>
-          <p className="text-sm opacity-90">
-            Learn more about our institution, its mission, and values.
-          </p>
-        </div>
-
-        {/* Box 2 */}
-        <div className="bg-gradient-to-r from-blue-900 via-blue-700 to-blue-600 p-6 rounded-xl shadow-lg text-white transform hover:-translate-y-2 hover:shadow-2xl transition duration-300 cursor-pointer">
-          <h3 className="text-xl font-bold mb-3">Our Mission</h3>
-          <p className="text-sm opacity-90">
-            We focus on providing quality technical education and skill
-            development.
-          </p>
-        </div>
-
-        {/* Box 3 */}
-        <div className="bg-gradient-to-r from-blue-900 via-blue-700 to-blue-600 p-6 rounded-xl shadow-lg text-white transform hover:-translate-y-2 hover:shadow-2xl transition duration-300 cursor-pointer">
-          <h3 className="text-xl font-bold mb-3">Vision</h3>
-          <p className="text-sm opacity-90">
-            Empowering youth with technical skills for better employment
-            opportunities.
-          </p>
-        </div>
-      </div>
-
-      {/* ...................................container of notic and quick................................................... */}
-
-      <div className="flex flex-col md:flex-row w-full gap-12 justify-center items-start mx-auto max-w-6xl mt-10 ">
-        {/* Quick Links */}
-        <div className="bg-white h-[380px] w-[600px] border rounded-xl hover:shadow-2xl transition duration-300 shadow-[0_10px_25px_rgba(30,64,175,0.6)]">
-          <div className="border-b px-4 py-3 bg-blue-900 rounded-t-xl">
-            <h2 className="text-xl font-semibold text-white">Quick Links</h2>
+      {/* --- Main Container: Sab kuch iske andar rahega --- */}
+      <div className="max-w-7xl mx-auto px-6 pb-24 grid grid-cols-1 lg:grid-cols-3 gap-10">
+        {/* 1. Quick Access Box */}
+        <div
+          className="bg-white rounded-[2.5rem] overflow-hidden border border-red-50 shadow-lg"
+          data-aos="fade-up"
+        >
+          <div className="bg-blue-900 p-6 flex items-center gap-4 text-white">
+            <FaExternalLinkAlt className="text-yellow-400" />
+            <h2 className="text-xl font-black uppercase tracking-tighter">
+              Quick Access
+            </h2>
           </div>
-
-          <ul className="p-4 space-y-3 text-blue-700">
-            <li className="flex items-center justify-between hover:bg-blue-50 p-2 rounded transition cursor-pointer">
+          <div className="p-6 space-y-2">
+            {[
+              { n: "NCVT MIS Portal", u: "https://www.ncvtmis.gov.in/" },
+              { n: "BHARAT SKILL", u: "https://bharatskills.gov.in/" },
+              { n: "eKalyan Scholarship", u: "https://ekalyan.cgg.gov.in/" },
+              { n: "National Scholarship", u: "https://scholarships.gov.in/" },
+            ].map((l, i) => (
               <a
-                href="https://xn--o1bna6ezc1cxc.xn--11b7cb3a6a.xn--h2brj9c/"
+                key={i}
+                href={l.u}
                 target="_blank"
-                rel="noopener noreferrer"
-                className="flex justify-between items-center w-full"
+                className="flex items-center justify-between p-4 rounded-xl hover:bg-red-50 text-slate-700 font-bold hover:text-red-700 transition-all"
               >
-                <span>Directorate General of Training</span>
-                <FaExternalLinkAlt />
+                {l.n} <FaArrowRight className="text-[10px]" />
               </a>
-            </li>
-            <li className="flex items-center justify-between hover:bg-blue-50 p-2 rounded transition cursor-pointer">
-              <a
-                href="https://ncvtmis.gov.in/pages/home.aspx"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex justify-between items-center w-full"
-              >
-                <span>NCVT MIS Portal</span>
-                <FaExternalLinkAlt />
-              </a>
-            </li>
-
-            <li className="flex items-center justify-between hover:bg-blue-50 p-2 rounded transition cursor-pointer">
-              <a
-                href="https://bharatskills.gov.in/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex justify-between items-center w-full"
-              >
-                <span>BHARAT SKILL</span>
-                <FaExternalLinkAlt />
-              </a>
-            </li>
-
-            <li className="flex items-center justify-between hover:bg-blue-50 p-2 rounded transition cursor-pointer">
-              <a
-                href="https://nimi.gov.in/web/index.php"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex justify-between items-center w-full"
-              >
-                <span>NIMI</span>
-                <FaExternalLinkAlt />
-              </a>
-            </li>
-
-            <li className="flex items-center justify-between hover:bg-blue-50 p-2 rounded transition cursor-pointer">
-              <a
-                href="https://bharatskills.gov.in/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex justify-between items-center w-full"
-              >
-                <span>eKalyan</span>
-                <FaExternalLinkAlt />
-              </a>
-            </li>
-
-            <li className="flex items-center justify-between hover:bg-blue-50 p-2 rounded transition cursor-pointer">
-              <a
-                href="https://scholarships.gov.in/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex justify-between items-center w-full"
-              >
-                <span>National Scholarship Portal</span>
-                <FaExternalLinkAlt />
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        {/* Notice Board */}
-        <div className="bg-white border rounded-xl md h-[380px] w-[600px] hover:shadow-2xl transition duration-300 shadow-[0_10px_25px_rgba(30,64,175,0.6)]">
-          <div className="border-b px-4 py-3 bg-red-800 rounded-t-xl">
-            <h2 className="text-xl font-semibold text-white">Notice Board</h2>
-          </div>
-
-          <div className="p-4 h-[250px] overflow-hidden">
-            <marquee
-              direction="up"
-              scrollamount="3"
-              className="space-y-4 text-gray-700"
-            >
-              <div className="flex gap-2">
-                <FaBullhorn className="text-red-600 mt-1" />
-                <p>SECOND MERIT LIST FOR ADMISSION SESSION 2023-24-25.</p>
-              </div>
-
-              <div className="flex gap-2">
-                <FaBullhorn className="text-red-600 mt-1" />
-                <p>Admission form extended till 10.07.2023</p>
-              </div>
-
-              <div className="flex gap-2">
-                <FaBullhorn className="text-red-600 mt-1" />
-                <p>Electrician Trade New Batch Starting Soon</p>
-              </div>
-
-              <div className="flex gap-2">
-                <FaBullhorn className="text-red-600 mt-1" />
-                <p>Practical Training Workshop Updated</p>
-              </div>
-            </marquee>
+            ))}
           </div>
         </div>
-        <div className="bg-blue-900 text-white py-10 flex justify-center border rounded-[5%] shadow-[0_10px_25px_rgba(30,64,175,0.6)] mt-7">
-          <div className="w-96 grid grid-cols-2 gap-8 text-center">
+
+        {/* 2. Online Mock Test Box */}
+        <div
+          className="bg-white rounded-[2.5rem] overflow-hidden border border-blue-50 shadow-lg"
+          data-aos="fade-up"
+          data-aos-delay="100"
+        >
+          <div className="bg-green-700 p-6 flex items-center gap-4 text-white">
+            <div className="bg-white/20 p-2 rounded-lg">
+              <FaLaptopCode className="text-yellow-400 text-xl" />
+            </div>
             <div>
-              <h2 className="text-4xl font-bold">500+</h2>
-              <p className="mt-2">Students Trained</p>
-            </div>
-
-            <div>
-              <h2 className="text-4xl font-bold">10+</h2>
-              <p className="mt-2">Courses</p>
-            </div>
-
-            <div>
-              <h2 className="text-4xl font-bold">25+</h2>
-              <p className="mt-2">Expert Trainers</p>
-            </div>
-
-            <div>
-              <h2 className="text-4xl font-bold">100%</h2>
-              <p className="mt-2">Practical Training</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ......................................Notice Board................................... */}
-
-      {/* Messages Section */}
-      <div className="mt-14 px-6 max-w-7xl mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-10 text-blue-900">
-          Messages
-        </h2>
-
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Chairman Message */}
-          <div className="bg-white border rounded-lg shadow-md p-6 hover:shadow-xl transition duration-300">
-            <h3 className="text-xl font-semibold mb-4 text-blue-800">
-              Chairman's Message
-            </h3>
-
-            <div className="flex flex-col md:flex-row gap-5 items-start">
-              <img
-                src="https://as2.ftcdn.net/v2/jpg/03/64/21/11/1000_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg"
-                alt="Chairman"
-                className="w-40 h-40 object-cover rounded-lg shadow-md transform hover:scale-105 transition duration-300"
-              />
-
-              <div className="text-sm leading-relaxed text-gray-700">
-                <p>
-                  Greetings and a very warm welcome to NTPC MAITI ITI’s website.
-                  In this era of globalization of education the obvious focus is
-                  on the quality of education. There is no single yardstick of
-                  quality.
-                </p>
-
-                <ul className="list-disc ml-5 mt-3 space-y-1">
-                  <li>Upgrade the skill level of project affected youth.</li>
-                  <li>Create opportunities for self-employment.</li>
-                  <li>Prepare youth for upcoming industries.</li>
-                  <li>Develop industrial work culture among trainees.</li>
-                  <li>Bring positive change in society.</li>
-                </ul>
-
-                <p className="mt-3">
-                  NTPC encourages students to learn with joy and develop
-                  technical skills such as electrician, fitter and welding.
-                </p>
-
-                <p className="mt-4 font-semibold text-gray-900">
-                  Mr. Faiz Taiyab <br />
-                  HOP <br />
-                  NTPC BCBMP
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* ISTD Conference Card */}
-          <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-2xl transform hover:-translate-y-1 transition duration-300">
-            <div className="h-[260px] overflow-hidden">
-              <img
-                src="/ISTD/ISTD  National Conference 2026 Brochure_page-0001.jpg"
-                alt="Conference"
-                className="w-full h-full object-cover hover:scale-110 transition duration-500"
-              />
-            </div>
-
-            <div className="p-6 text-center">
-              <h3 className="text-xl font-semibold text-blue-900 mb-3">
-                ISTD: Conference
-              </h3>
-
-              <p className="text-gray-700 text-sm leading-relaxed">
-                The top environmental issues are selfishness, greed and apathy
-                to deal with them. There is a need for behavioral and cultural
-                transformation in the human resource management space.
+              <h2 className="text-xl font-black uppercase tracking-tighter leading-none">
+                Online Mock Test
+              </h2>
+              <p className="text-[10px] uppercase font-bold opacity-80 mt-1">
+                Practice for CBT Exams
               </p>
+            </div>
+          </div>
+          <div className="p-6 space-y-2">
+            {[
+              {
+                n: "NIMI Online Mock Test",
+                u: "https://s1.nimimocktest.in/",
+                desc: "Official NIMI Platform",
+              },
+              {
+                n: "NCVT Online Mock Test",
+                u: "https://www.ncvtonline.com/2020/05/iti-mock-test-all-trade-online-test-in.html",
+                desc: "All Trades Practice",
+              },
+              {
+                n: "Bharat Skills Portal",
+                u: "https://bharatskills.gov.in/",
+                desc: "Study Material & Tests",
+              },
+              {
+                n: "CBT Exam Practice",
+                u: "https://www.ncvtmis.gov.in/",
+                desc: "Main MIS Portal",
+              },
+            ].map((test, i) => (
+              <a
+                key={i}
+                href={test.u}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center justify-between p-4 rounded-xl hover:bg-blue-50 border border-transparent hover:border-blue-100 transition-all duration-300"
+              >
+                <div className="flex flex-col">
+                  <span className="text-slate-800 font-black text-sm group-hover:text-blue-700 transition-colors">
+                    {test.n}
+                  </span>
+                  <span className="text-[10px] text-slate-500 font-bold uppercase">
+                    {test.desc}
+                  </span>
+                </div>
+                <div className="bg-slate-100 group-hover:bg-blue-600 group-hover:text-white p-2 rounded-lg transition-all">
+                  <FaArrowRight className="text-[10px]" />
+                </div>
+              </a>
+            ))}
+          </div>
+          <div className="px-6 pb-6">
+            <div className="bg-yellow-50 border border-yellow-100 p-3 rounded-xl text-center">
+              <p className="text-[11px] font-bold text-yellow-800">
+                📢 Students are advised to practice daily!
+              </p>
+            </div>
+          </div>
+        </div>
 
+        {/* 3. Notice Board Box */}
+        <div
+          className="bg-white rounded-[2.5rem] overflow-hidden border border-red-50 shadow-lg group/notice"
+          data-aos="fade-up"
+          data-aos-delay="200"
+        >
+          <Link
+            to="/Notice"
+            className="bg-red-700 p-6 flex items-center justify-between text-white hover:bg-red-800 transition-colors"
+          >
+            <div className="flex items-center gap-4">
+              <FaBullhorn className="animate-pulse text-yellow-300" />
+              <h2 className="text-xl font-black uppercase tracking-tighter items-center">
+                Notice Board
+              </h2>
+            </div>
+            <FaArrowRight className="text-sm" />
+          </Link>
+          <div className="p-6 h-[280px] overflow-hidden relative bg-gradient-to-b from-red-50/20 to-transparent cursor-pointer">
+            <div className="animate-vertical space-y-4">
+              {[...notices, ...notices].map((n, i) => (
+                <div
+                  key={i}
+                  className="bg-white p-4 rounded-xl border-l-4 border-red-600 shadow-sm font-bold text-slate-800 text-sm hover:bg-red-50 transition-colors"
+                >
+                  {n}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* 4. Stats Box (Yeh automatically niche aayega agar 3 se zyada boxes hain) */}
+        <div
+          className="bg-slate-900 rounded-[2.5rem] p-10 text-white flex flex-col justify-center shadow-xl relative overflow-hidden lg:col-span-3"
+          data-aos="fade-up"
+          data-aos-delay="300"
+        >
+          <h2 className="text-center text-red-500 font-black uppercase text-xs tracking-[0.4em] mb-10">
+            NTPC MAITI STATUS
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10 relative z-10 text-center">
+            {[
+              { n: "1.2k+", t: "Graduates" },
+              { n: "15+", t: "Workshops" },
+              { n: "30+", t: "Partners" },
+              { n: "95%", t: "Placement" },
+            ].map((s, i) => (
+              <div key={i}>
+                <h4 className="text-3xl font-black">{s.n}</h4>
+                <p className="text-[10px] text-slate-400 uppercase font-black">
+                  {s.t}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* --- Chairman Message Section --- */}
+      <div className="bg-white py-24 px-6">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+          {/* Leadership Vision Card */}
+          <div data-aos="fade-up" className="h-full">
+            <h2 className="text-4xl font-black text-slate-900 mb-8 uppercase italic tracking-tighter">
+              Leadership Vision.
+            </h2>
+            <div className="bg-slate-50 p-8 rounded-[2.5rem] shadow-xl border border-slate-100 flex flex-col h-full">
+              <div className="flex flex-col md:flex-row gap-8 items-center mb-6">
+                <img
+                  src="/home slide pic/faiz taiyab.jpeg"
+                  alt="Chairman"
+                  className="w-40 h-40 rounded-3xl object-cover shadow-lg border-4 border-white"
+                />
+                <div>
+                  <FaQuoteLeft className="text-blue-600/20 text-4xl mb-3" />
+                  <p className="text-slate-600 font-medium italic mb-4 leading-relaxed">
+                    "Transforming youth into skilled industrial professionals."
+                  </p>
+                  <h4 className="text-xl font-black text-blue-900 uppercase">
+                    Faiz Taiyab
+                  </h4>
+                  <p className="text-red-600 font-black text-xs uppercase tracking-widest">
+                    HOP, NTPC Barkagaon
+                  </p>
+                </div>
+                <p></p>
+              </div>
+              NTPC Barkagaon is committed to excellence in technical education.
+              Our vision is to empower students with practical knowledge and
+              industrial ethics. NTPC Barkagaon is committed to excellence in
+              technical education. Our vision is to empower students with
+              practical knowledge and industrial ethics.
+              <motion.div
+                initial={false}
+                animate={{
+                  height: showMore ? "auto" : 0,
+                  opacity: showMore ? 1 : 0,
+                }}
+                className="overflow-hidden"
+              >
+                <p className="text-slate-600 text-sm leading-relaxed border-t border-slate-200 pt-4">
+                  Greetings and a very warm welcome to NTPC MAITI ITI’s website
+                  In this era of Globalization of education the obvious focus is
+                  on the quality of education. There is no single yardstick of
+                  quality. A good educational institution strives continuously
+                  for sustenance and enhancement of quality in every field of
+                  its activity. As NTPC MAITI works diligently to realise its
+                  mission of providing the best learning opportunities for
+                  academic excellence to students, it continues to provide
+                  students with the basics of technical knowledge coupled with
+                  high values to achieve given below objectives : To upgrade the
+                  skill level of youths of Project affected area to enhance
+                  their employability. To create opportunities for
+                  self-employment. To prepare the youth for upcoming industries
+                  in Jharkhand State as well as in the country. To inculcate
+                  industrial work culture among the trainees. To develop
+                  trainees to become catalysts in bringing a positive change in
+                  their societies. NTPC recreated a culture of learn with joy,
+                  and enable students to acquire skills in trades such as
+                  electrician, fitter and welder that provide a foundation for
+                  the next phases of their careers and lives. NTPC MAITI stands
+                  committed to the practice of academic excellence and
+                  encourages , Innovation and learning’s Mr. Faiz Taiyab, HOP,
+                  NTPC PBCMP
+                </p>
+              </motion.div>
+              <button
+                onClick={() => setShowMore(!showMore)}
+                className="mt-6 text-blue-600 font-black uppercase text-xs tracking-widest flex items-center gap-2 group"
+              >
+                {showMore ? "Show Less" : "Read Full Vision"}
+                <FaArrowRight
+                  className={`transition-transform ${showMore ? "-rotate-90" : "group-hover:translate-x-1"}`}
+                />
+              </button>
+            </div>
+          </div>
+
+          {/* HR Excellence Card */}
+          <div
+            className="relative rounded-[2.5rem] p-10 text-white shadow-xl flex flex-col justify-between h-full lg:mt-20 overflow-hidden group"
+            data-aos="fade-up"
+            data-aos-delay="200"
+          >
+            {/* Background Image Layer */}
+            <div className="absolute inset-0 z-0">
+              <img
+                src="public\ISTD\ISTD  National Conference 2026 Brochure_page-0001.jpg" // Yahan apni ISTD wali image ka sahi path dalein
+                alt="ISTD Training"
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              />
+              {/* Dark Overlay taaki text clear dikhe */}
+              <div className="absolute inset-0 bg-blue-650/80 backdrop-blur-[2px]"></div>
+            </div>
+
+            {/* Content Layer (z-10 ensures text stays on top) */}
+            <div className="relative z-10 bg-gradient-to-br from-slate-900 via-blue-900 to-black border-2 border-rose-500/50 rounded-[2.5rem] p-8 shadow-[0_20px_50px_rgba(225,29,72,0.2)] backdrop-blur-sm transition-all duration-500 hover:shadow-rose-500/30">
+              <h3 className="text-2xl font-black mb-4 text-yellow-400 uppercase italic">
+                ISTD<br></br>
+                HR Excellence
+              </h3>
+              <p className="text-blue-50 text-lg mb-8 leading-relaxed font-medium ">
+                We follow the highest standards of ISTD and industrial training
+                to ensure global readiness.
+              </p>
+            </div>
+
+            <div className="relative z-10">
               <Link
                 to="/Istdpdf"
-                className="inline-block mt-5 bg-blue-700 text-white px-6 py-2 rounded-md hover:bg-blue-900 transition"
+                className="inline-flex items-center gap-3 bg-white text-blue-900 px-8 py-3 rounded-xl font-black uppercase tracking-widest hover:bg-yellow-400 transition-all shadow-lg text-sm w-fit"
               >
-                Read More
+                Read More <FaArrowRight />
               </Link>
             </div>
           </div>
         </div>
       </div>
-      {/* Vice Chairman Message */}
-
-      <div className="mt-14 px-6 max-w-7xl mx-auto">
-        <div className="border rounded-lg shadow-md bg-gray-50">
-          {/* Title */}
-          <div className="border-b bg-gray-200 px-4 py-2">
-            <h2 className="text-lg font-semibold text-gray-800">
-              Vice Chairman's Message
-            </h2>
+      {/* ======================================================== */}
+      {/* NEW SECTION: VICE CHAIRMAN'S MESSAGE (Top Trades ke Uper) */}
+      {/* ======================================================== */}
+      <div className="max-w-7.5xl mx-auto px-6 py-20">
+        <div
+          className="bg-gradient-to-br from-[#0f172a] via-[#cce2f7] to-[#1b3f14] rounded-[3rem] p-8 md:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-slate-700/50 flex flex-col lg:flex-row items-center gap-12 relative overflow-hidden group"
+          data-aos="fade-up"
+        >
+          <div className="w-full lg:w-1/3 flex flex-col items-center">
+            <div className="relative group">
+              <img
+                src="/home slide pic/faiz taiyab.jpeg" // Yahan Vice Chairman ki image ka path dalein
+                alt="Vice Chairman"
+                className="w-64 h-80 rounded-3xl object-cover shadow-2xl border-8 border-white"
+              />
+              <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-6 py-2 rounded-xl font-bold shadow-xl whitespace-nowrap">
+                Vice Chairman
+              </div>
+            </div>
           </div>
 
-          <div className="flex flex-col md:flex-row gap-6 p-5">
-            {/* Text */}
-            <div className="text-sm text-gray-700 leading-relaxed flex-1">
-              <p>
-                I deem it to be a matter of immense pleasure and honor for me to
-                address you all through the website of NTPC Mining and
-                Industrial Training Institute.
-              </p>
+          <div className="w-full lg:w-2/3">
+            <h2 className="text-3xl font-black text-slate-900 mb-6 uppercase italic tracking-tighter border-l-8 border-red-600 pl-6">
+              Vice Chairman's Message
+            </h2>
+            <p className="text-slate-600 text-lg leading-relaxed mb-8 italic">
+              "I deem it to be a matter of immense pleasure and honour for me to
+              address you all through the website of NTPC Mining and industrial
+              Training Institute..."
+            </p>
 
-              {showViceFull && (
-                <>
-                  <p className="mt-3">
-                    It is indeed very heartening to witness that the ITI has
-                    carved a name for itself in the academic scenario of the
-                    region. Engineering skill is the most powerful tool to bring
-                    desirable changes in our personality and also to bring
-                    positive changes in our society.
+            {/* DaisyUI Modal Trigger Button */}
+            <label
+              htmlFor="vc_message_modal"
+              className="btn btn-primary bg-green-700 border-none px-10 rounded-2xl text-white font-black uppercase tracking-widest shadow-xl hover:scale-105 transition-all"
+            >
+              Read Full Message
+            </label>
+          </div>
+        </div>
+
+        {/* --- DAISYUI MODAL (A4 STYLE) --- */}
+        <input type="checkbox" id="vc_message_modal" className="modal-toggle" />
+        <div className="modal modal-bottom sm:modal-middle backdrop-blur-md z-[500]">
+          <div className="modal-box w-11/12 max-w-4xl bg-yellow-00 p-0 rounded-3xl overflow-hidden border-none shadow-2xl h-[90vh]">
+            {/* Modal Header */}
+            <div className="bg-slate-900 p-6 flex justify-between items-center text-white sticky top-0 z-50">
+              <h3 className="text-xl font-black uppercase italic tracking-widest">
+                Vice Chairman's Message
+              </h3>
+              <label
+                htmlFor="vc_message_modal"
+                className="btn btn-sm btn-circle bg-white/20 border-none text-white hover:bg-red-600"
+              >
+                ✕
+              </label>
+            </div>
+
+            {/* Modal Body (A4 Style Content) */}
+            <div className="p-10 md:p-16 bg-white overflow-y-auto h-full scrollbar-hide">
+              <div className="max-w-2xl mx-auto border-t-8 border-blue-600 pt-10">
+                {/* Header Image in Content */}
+                <div className="flex flex-col md:flex-row gap-10 items-start mb-12">
+                  <img
+                    src="/home slide pic/faiz taiyab.jpeg"
+                    className="w-48 h-56 rounded-2xl object-cover shadow-lg border-4 border-slate-50"
+                    alt="VC"
+                  />
+                  <div>
+                    <FaQuoteLeft className="text-blue-100 text-6xl absolute -z-10" />
+                    <p className="text-slate-800 font-bold text-xl leading-relaxed mt-6 relative z-10">
+                      "Engineering skill is the most powerful tool to bring
+                      desirable changes in our personality and society."
+                    </p>
+                  </div>
+                </div>
+
+                {/* Main Text Body */}
+                <div className="prose prose-slate max-w-none text-slate-700 text-lg leading-loose space-y-6 text-justify font-medium">
+                  <p>
+                    I deem it to be a matter of immense pleasure and honour for
+                    me to address you all through the website of NTPC Mining and
+                    industrial Training Institute. It is indeed very heartening
+                    to witness that the ITI has carved a name for itself in the
+                    academic scenario of the region. Engineering skill is the
+                    most powerful tool to bring desirable changes in our
+                    personality and also to bring positive changes in our
+                    society.
                   </p>
 
-                  <p className="mt-3">
+                  <p>
                     NTPC Mining and Industrial Training Institute (MAITI) is a
                     great initiative of the National Thermal Power Corporation
                     Limited, Government of India Enterprises in collaboration
-                    with the Jharkhand Government Tool Room, Ranchi.
+                    with the “Jharkhand Government Tool Room, Ranchi” a society
+                    under Department of Industries Government of Jharkhand.
+                    Which has been launched to empower the local youth of the
+                    Project affected area of Barkagaon with skill sets which
+                    make them more employable and more productive in their work
+                    environment. Our NTPC MAITI is chaired by the Head of
+                    project of NTPC Coal mining project barkagaon.
                   </p>
-                </>
-              )}
 
-              {/* Button */}
-              <button
-                onClick={() => setShowViceFull(!showViceFull)}
-                className="mt-4 bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-800 transition"
-              >
-                {showViceFull ? "Read Less" : "Read More..."}
-              </button>
-            </div>
+                  <p>
+                    The NTPC MAITI has incredible training infrastructure among
+                    the other ITIs of Jharkhand. The expert officials of
+                    Jharkhand Government Tool Room, Ranchi has constantly
+                    reviewed, examine, support and developing the training
+                    infrastructure up to the higher standards. Through this
+                    skill development centre ITI management want to fulfill
+                    dreams of people & we want to do it in a structured way,
+                    taking all youth together.
+                  </p>
 
-            {/* Image */}
-            <div className="w-40">
-              <img
-                src="vice chairman.jpeg"
-                alt="Vice Chairman"
-                className="w-full h-auto border"
-              />
+                  <p>
+                    NTPC MAITI is working with full dedication towards
+                    fulfilling the prime vision of Ministry of skill development
+                    and entrepreneurship to providing skilled manpower to our
+                    country for the development of domestic growth as well as
+                    for the self-employment. ITI management has to create
+                    structures and mechanisms to nurture youngsters, enabling
+                    them to find employment. This initiative is not merely to
+                    fill gap of skill development in far flung area of
+                    Jharkhand, but to bring a sense of self-confidence among the
+                    youth of Jharkhand.
+                  </p>
+
+                  <p className="pb-10 font-bold border-b border-slate-100">
+                    I earnestly hope and trust that, my esteemed academicians
+                    and budding technocrats will work with sincerity, honesty
+                    and dedication and thereby contribute to make this world a
+                    better place to live in.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
+          <label className="modal-backdrop" htmlFor="vc_message_modal">
+            Close
+          </label>
         </div>
       </div>
+      {/* --- END NEW SECTION --- */}
 
-      {/* About Us Section */}
-      <div className="bg-gray-100 py-16 mt-16">
-        <div className="max-w-7xl mx-auto px-6">
-          {/* Heading */}
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-teal-600 tracking-wider">
-              ABOUT US
-            </h2>
+      {/* ======================================================== */}
+      {/* NEW SECTION: WELCOME TO NTPC MAITI (Just below VC Message) */}
+      {/* ======================================================== */}
+      <div className="bg-slate-50 py-24 px-6 border-t border-slate-200">
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16 items-center">
+          {/* Left Side: Workshop Image */}
+          <div className="w-full lg:w-1/2" data-aos="fade-right">
+            <div className="relative group">
+              <img
+                src="/home slide pic/welder.jpeg" // Aap apni image path yahan dalein (e.g., workshop image)
+                alt="NTPC MITI Workshop"
+                className="w-full h-[500px] object-cover rounded-[3rem] shadow-2xl border-4 border-white transition-transform duration-500 group-hover:scale-[1.02]"
+              />
+              {/* Badge Overlay */}
+              <div className="absolute top-8 left-8 bg-blue-600 text-white px-6 py-3 rounded-2xl font-black uppercase tracking-tighter shadow-xl">
+                Skill Excellence
+              </div>
+            </div>
           </div>
 
-          {/* Content */}
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            {/* Left Image */}
-            <div>
-              <img
-                src="about us.jpeg"
-                alt="Workshop Training"
-                className="rounded-lg shadow-lg w-full"
-              />
+          {/* Right Side: Content */}
+          <div className="w-full lg:w-1/2" data-aos="fade-left">
+            <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-8 uppercase italic tracking-tighter leading-tight">
+              Welcome to <br />
+              <span className="text-blue-600">NTPC MAITI</span>
+            </h2>
+
+            <div className="space-y-6 text-slate-600 text-lg font-medium leading-relaxed">
+              <p>
+                NTPC Ltd. (A government of India Undertaking), engaged in
+                establishing, running power generation plants all over India to
+                cater to the needs of power requirement of the total installed
+                capacity...
+              </p>
+
+              <div className="bg-white p-6 rounded-2xl border-l-8 border-yellow-400 shadow-sm">
+                <p className="text-slate-800 font-bold italic">
+                  "The NTPC MAITI is awarded with 3.04 star rating by
+                  Directorate General of Training New Delhi."
+                </p>
+              </div>
+
+              <p>
+                We offer one year and two year NCVT approved courses since 2015
+                in Fitter, Welder and Electrician with 100% placement records.
+              </p>
             </div>
 
-            {/* Right Text */}
-            <div>
-              <h3 className="text-2xl font-semibold text-gray-800 mb-4">
-                Welcome to NTPC MAITI
-              </h3>
-
-              <p className="text-gray-700 leading-relaxed mb-4">
-                NTPC Ltd. (A Government of India Undertaking) is engaged in
-                establishing and running power generation plants across India.
-                NTPC Mining and Industrial Training Institute (MAITI) was
-                established to provide skill development and technical training
-                to project affected people and unemployed youth of the region.
-              </p>
-
-              <p className="text-gray-700 leading-relaxed mb-4">
-                The institute offers NCVT approved courses such as Electrician,
-                Fitter and Welder with a strong focus on practical training and
-                industry skills.
-              </p>
-
-              <p className="text-gray-700 leading-relaxed mb-6">
-                NTPC MAITI has been recognized for its quality training and has
-                achieved top rankings among ITIs in the district and state.
-              </p>
-
+            {/* Read More Button leading to About Page */}
+            <div className="mt-12">
               <Link
-                to="/about"
-                className="bg-teal-500 text-white px-6 py-3 rounded hover:bg-teal-700 transition"
+                to="/About"
+                className="inline-flex items-center gap-4 bg-cyan-500 hover:bg-cyan-600 text-white px-10 py-4 rounded-xl font-black uppercase tracking-widest transition-all shadow-[0_10px_20px_rgba(6,182,212,0.3)] hover:scale-105 active:scale-95"
               >
-                Read More
+                Read More <FaArrowRight />
               </Link>
             </div>
           </div>
         </div>
       </div>
-      {/* Courses Categories Section */}
+      {/* --- END WELCOME SECTION --- */}
 
-      {/* Courses Categories Section */}
-
-     <div className="bg-gray-100 py-20">
-  <div className="max-w-7xl mx-auto px-6">
-
-    <div className="text-center mb-14">
-      <h2 className="text-3xl font-bold text-cyan-600 tracking-widest">
-        COURSES CATEGORIES
-      </h2>
-    </div>
-
-    <div className="grid md:grid-cols-3 gap-8">
-
-      {/* Electrician */}
-      <div
-        data-aos="zoom-in-up"
-        data-aos-duration="1500"
-        className="relative group overflow-hidden rounded-xl shadow-xl transform hover:-translate-y-4 transition duration-500"
-      >
-
-        <img
-          src="/trade_picture/electrician.jpeg"
-          alt="Electrician"
-          className="w-full h-[420px] object-cover transition duration-700 group-hover:scale-110"
-        />
-
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition duration-500"></div>
-
-        {/* Text + Button */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center opacity-0 group-hover:opacity-100 transition duration-500">
-
-          <h3 className="text-white text-3xl font-bold mb-3">
-            Electrician
-          </h3>
-
-          <p className="text-gray-200 text-sm mb-4">
-            2 Year NCVT Course
-          </p>
-
-          <button className="bg-cyan-500 hover:bg-cyan-700 text-white px-5 py-2 rounded-md transition">
-            View Details
-          </button>
-
+      {/* --- Top Trades --- */}
+      <div className="bg-slate-50 py-24 px-6 border-t border-slate-100">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16" data-aos="fade-up">
+            <h2 className="text-5xl font-black text-slate-900 tracking-tighter uppercase italic">
+              {" "}
+              Our <span className="text-blue-600">Top Trades</span>{" "}
+            </h2>
+            <div className="w-20 h-2 bg-red-600 mx-auto mt-4 rounded-full"></div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            {[
+              {
+                t: "Electrician",
+                img: "/trade_picture/electrician.jpeg",
+                dur: "2 Years NCVT",
+              },
+              {
+                t: "Fitter",
+                img: "/trade_picture/fitter.jpeg",
+                dur: "2 Years NCVT",
+              },
+              {
+                t: "Welder",
+                img: "/trade_picture/welder.jpeg",
+                dur: "1 Year NCVT",
+              },
+            ].map((course, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 80 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: i * 0.2 }}
+                whileHover={{ scale: 1.03 }}
+                className="group relative h-[500px] rounded-[3rem] overflow-hidden shadow-xl bg-white"
+              >
+                <img
+                  src={course.img}
+                  alt={course.t}
+                  className="w-full h-full object-cover transition-all duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent flex flex-col justify-end p-8">
+                  <span className="text-yellow-400 font-black text-xs uppercase tracking-widest mb-2">
+                    {" "}
+                    {course.dur}{" "}
+                  </span>
+                  <h3 className="text-white text-3xl font-black mb-6 italic uppercase tracking-tighter">
+                    {" "}
+                    {course.t}{" "}
+                  </h3>
+                  <button className="w-full bg-white text-slate-900 py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all shadow-lg">
+                    {" "}
+                    Trade Info{" "}
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
-
       </div>
-
-
-      {/* Fitter */}
-      <div
-        data-aos="zoom-in-up"
-        data-aos-delay="200"
-        data-aos-duration="1500"
-        className="relative group overflow-hidden rounded-xl shadow-xl transform hover:-translate-y-4 transition duration-500"
-      >
-
-        <img
-          src="/trade_picture/fitter.jpeg"
-          alt="Fitter"
-          className="w-full h-[420px] object-cover transition duration-700 group-hover:scale-110"
-        />
-
-        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition duration-500"></div>
-
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center opacity-0 group-hover:opacity-100 transition duration-500">
-
-          <h3 className="text-white text-3xl font-bold mb-3">
-            Fitter
-          </h3>
-
-          <p className="text-gray-200 text-sm mb-4">
-            2 Year NCVT Course
-          </p>
-
-          <button className="bg-cyan-500 hover:bg-cyan-700 text-white px-5 py-2 rounded-md transition">
-            View Details
-          </button>
-
-        </div>
-
-      </div>
-
-
-      {/* Welder */}
-      <div
-        data-aos="zoom-in-up"
-        data-aos-delay="400"
-        data-aos-duration="1500"
-        className="relative group overflow-hidden rounded-xl shadow-xl transform hover:-translate-y-4 transition duration-500"
-      >
-
-        <img
-          src="/trade_picture/welder.jpeg"
-          alt="Welder"
-          className="w-full h-[420px] object-cover transition duration-700 group-hover:scale-110"
-        />
-
-        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition duration-500"></div>
-
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center opacity-0 group-hover:opacity-100 transition duration-500">
-
-          <h3 className="text-white text-3xl font-bold mb-3">
-            Welder
-          </h3>
-
-          <p className="text-gray-200 text-sm mb-4">
-            1 Year NCVT Course
-          </p>
-
-          <button className="bg-cyan-500 hover:bg-cyan-700 text-white px-5 py-2 rounded-md transition">
-            View Details
-          </button>
-
-        </div>
-
-      </div>
-
-    </div>
-  </div>
-</div>
     </section>
   );
 }

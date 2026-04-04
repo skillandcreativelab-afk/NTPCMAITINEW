@@ -7,4 +7,18 @@
     border-radius: 1%;
    
 }
+@keyframes marquee {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.animate-marquee {
+  display: inline-block;
+  animation: marquee 15s linear infinite;
+}
+
+
+.animate-notice {
+  animation: noticeScroll 12s linear infinite;
+}
 
