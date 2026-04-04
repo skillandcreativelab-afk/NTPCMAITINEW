@@ -4,7 +4,9 @@ import AdminLogin from "./AdminLogin";
 
 function ProtectedRoute({ children }) {
   const [auth, setAuth] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false);
+  
+  // Update: Check localStorage so it stays logged in after refresh
+  const [isAdmin, setIsAdmin] = useState(localStorage.getItem("isSuperAdmin") === "true");
 
   useEffect(() => {
     fetch("http://localhost:5000/api/check-auth", { credentials: "include" })
@@ -13,12 +15,21 @@ function ProtectedRoute({ children }) {
       .catch(() => setAuth(false));
   }, []);
 
-  if (auth === null) return <div>Loading...</div>;
+  if (auth === null) return <div className="p-10 text-center font-bold">Syncing Records...</div>;
+  
   if (auth === false) return <Navigate to="/" />;
 
-  // Agar admin password abhi tak nahi diya
+  // Agar admin password abhi tak nahi diya (ya isSuperAdmin false hai)
   if (!isAdmin) {
-    return <AdminLogin onSuccess={() => setIsAdmin(true)} />;
+    return (
+      <AdminLogin 
+        onSuccess={() => {
+          // Update: Set isSuperAdmin to true for placement management
+          localStorage.setItem("isSuperAdmin", "true");
+          setIsAdmin(true);
+        }} 
+      />
+    );
   }
 
   return children;

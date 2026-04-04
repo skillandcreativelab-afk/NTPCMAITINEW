@@ -9,7 +9,8 @@ function Placement() {
   const [editIndex, setEditIndex] = useState(null);
   const [editData, setEditData] = useState({});
 
-  const isAdmin = localStorage.getItem("isAdmin") === "true";
+  // CHANGE: Ab ye 'isSuperAdmin' check karega placement manage karne ke liye
+  const isSuperAdmin = localStorage.getItem("isSuperAdmin") === "true";
   const itemsPerPage = 15;
 
   useEffect(() => {
@@ -26,7 +27,7 @@ function Placement() {
   }, [data]);
 
   const handleFileUpload = (e) => {
-    if (!isAdmin) return;
+    if (!isSuperAdmin) return;
     const file = e.target.files[0];
     if (!file) return;
 
@@ -63,15 +64,13 @@ function Placement() {
   const currentData = filteredData.slice(startIndex, startIndex + itemsPerPage);
 
   const handleLogout = () => {
-    localStorage.removeItem("isAdmin");
+    localStorage.removeItem("isSuperAdmin");
     window.location.reload();
   };
 
   return (
     <div className="p-4 md:p-10 bg-slate-50 min-h-screen font-sans">
       <div className="max-w-7xl mx-auto">
-        
-        {/* --- Header Section with Stats --- */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
           <div className="col-span-2 flex flex-col justify-center">
             <h1 className="text-4xl font-extrabold text-slate-800 tracking-tight">
@@ -81,7 +80,7 @@ function Placement() {
           </div>
           
           <div className="flex items-center justify-end gap-3">
-            {isAdmin ? (
+            {isSuperAdmin ? (
               <div className="dropdown dropdown-end">
                 <label tabIndex={0} className="btn btn-primary shadow-lg gap-2">
                   Admin Tools <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
@@ -105,41 +104,28 @@ function Placement() {
           </div>
         </div>
 
-        {/* --- Quick Stats Bar --- */}
         <div className="stats shadow-sm w-full bg-white mb-10 border border-slate-100">
           <div className="stat">
-            <div className="stat-figure text-primary">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-8 h-8 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            </div>
             <div className="stat-title">Total Placed</div>
             <div className="stat-value text-primary">{data.length}</div>
             <div className="stat-desc">Students till now</div>
           </div>
-          
           <div className="stat">
-            <div className="stat-figure text-secondary">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-8 h-8 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
-            </div>
             <div className="stat-title">Top Recruiter</div>
-            <div className="stat-value text-secondary text-2xl">TATA Motors & IIT Gandhinagar Etc</div>
-            <div className="stat-desc">Major hiring partner</div>
+            <div className="stat-value text-secondary text-2xl">TATA Motors & IIT Gandhinagar</div>
           </div>
         </div>
 
-        {/* --- Search & Table Card --- */}
         <div className="card bg-white shadow-xl border border-slate-100 overflow-hidden">
           <div className="p-6 border-b border-slate-50 flex flex-col md:flex-row justify-between items-center gap-4">
             <h2 className="text-xl font-bold text-slate-700">Placement Records</h2>
-            <div className="relative w-full max-w-xs">
-              <input
-                type="text"
-                placeholder="Search anything..."
-                className="input input-bordered w-full pl-10 focus:input-primary transition-all"
-                value={search}
-                onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
-              />
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 absolute left-3 top-3 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-            </div>
+            <input
+              type="text"
+              placeholder="Search..."
+              className="input input-bordered w-full max-w-xs"
+              value={search}
+              onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
+            />
           </div>
 
           <div className="overflow-x-auto">
@@ -150,14 +136,13 @@ function Placement() {
                   <th>Trade Info</th>
                   <th>Company</th>
                   <th>Package (LPA)</th>
-                  {isAdmin && <th className="text-center">Manage</th>}
+                  {isSuperAdmin && <th className="text-center">Manage</th>}
                 </tr>
               </thead>
               <tbody className="text-slate-700">
                 {currentData.map((item, index) => {
                   const gIndex = startIndex + index;
                   const isEditing = editIndex === gIndex;
-
                   return (
                     <tr key={gIndex} className="hover:bg-blue-50/50 transition-all group">
                       {isEditing ? (
@@ -166,28 +151,19 @@ function Placement() {
                           <td><input className="input input-bordered input-sm w-full" value={editData.trade} onChange={(e)=>setEditData({...editData, trade: e.target.value})}/></td>
                           <td><input className="input input-bordered input-sm w-full" value={editData.company} onChange={(e)=>setEditData({...editData, company: e.target.value})}/></td>
                           <td><input className="input input-bordered input-sm w-full" value={editData.package} onChange={(e)=>setEditData({...editData, package: e.target.value})}/></td>
-                          <td className="text-center"><button className="btn btn-success btn-sm px-6" onClick={()=>setEditIndex(null)}>Save</button></td>
+                          <td className="text-center"><button className="btn btn-success btn-sm" onClick={()=>setEditIndex(null)}>Save</button></td>
                         </>
                       ) : (
                         <>
-                          <td className="py-4 px-6">
-                            <div className="flex items-center gap-3">
-                              <div className="avatar placeholder">
-                                <div className="bg-primary text-primary-content rounded-full w-8 h-8 text-xs">
-                                  {item.name?.charAt(0)}
-                                </div>
-                              </div>
-                              <span className="font-bold text-slate-800">{item.name}</span>
-                            </div>
-                          </td>
-                          <td><div className="badge badge-ghost font-medium">{item.trade}</div></td>
-                          <td><span className="font-medium text-primary">{item.company}</span></td>
-                          <td><span className="font-mono font-bold text-success bg-success/10 px-2 py-1 rounded">{item.package}</span></td>
-                          {isAdmin && (
+                          <td className="py-4 px-6 font-bold">{item.name}</td>
+                          <td><div className="badge badge-ghost">{item.trade}</div></td>
+                          <td className="text-primary font-medium">{item.company}</td>
+                          <td><span className="font-bold text-success bg-success/10 px-2 py-1 rounded">{item.package}</span></td>
+                          {isSuperAdmin && (
                             <td className="text-center opacity-0 group-hover:opacity-100 transition-opacity">
-                              <div className="join shadow-sm border border-slate-200">
-                                <button className="btn btn-ghost btn-xs join-item text-info" onClick={() => {setEditIndex(gIndex); setEditData(item)}}>Edit</button>
-                                <button className="btn btn-ghost btn-xs join-item text-error" onClick={() => setData(data.filter((_, i) => i !== gIndex))}>Del</button>
+                              <div className="join">
+                                <button className="btn btn-ghost btn-xs text-info" onClick={() => {setEditIndex(gIndex); setEditData(item)}}>Edit</button>
+                                <button className="btn btn-ghost btn-xs text-error" onClick={() => setData(data.filter((_, i) => i !== gIndex))}>Del</button>
                               </div>
                             </td>
                           )}
@@ -200,8 +176,6 @@ function Placement() {
             </table>
           </div>
         </div>
-
-        {/* --- Pagination --- */}
         <div className="mt-10 flex justify-center pb-10">
           <Pagination currentPage={currentPage} totalPages={totalPages} setCurrentPage={setCurrentPage} />
         </div>

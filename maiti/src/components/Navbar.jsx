@@ -19,7 +19,7 @@ function Navbar() {
   return (
     <div className="w-full">
       {/* --- Nayi Patti (Top Bar) --- */}
-<div className="bg-[#f0f3f7] text-[#0e7be9] text-center py-3 px-4 border-b-2 border-gray-300 uppercase shadow-inner">
+<div className="bg-[#f0f3f7] text-[#1182f3] text-center py-3 px-4 border-b-2 border-gray-300 uppercase shadow-inner">
   <h1 className="text-lg md:text-3xl font-extrabold tracking-tighter sm:tracking-normal">
     NTPC MINING AND INDUSTRIAL TRAINING INSTITUTE DHENGA BARKAGAON
   </h1>
