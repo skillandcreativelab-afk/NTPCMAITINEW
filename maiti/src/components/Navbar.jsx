@@ -1,5 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+// Agar aapne icons use kiye hain toh:
+import { FaGlobeAmericas, FaPhoneAlt, FaCamera, FaRocket } from "react-icons/fa";
 
 function Navbar() {
   const [user, setUser] = useState(null);
@@ -40,8 +43,57 @@ function Navbar() {
 
   return (
     
-    <div className="w-full">
-      <h1>hhh</h1>
+    <div className="w-full">{/* --- FINAL FIXED NAVBAR LOGO HEADER --- */}
+{/* --- FINAL BALANCED NAVBAR HEADER --- */}
+<motion.div 
+  initial={{ opacity: 0, y: -10 }} 
+  animate={{ opacity: 1, y: 0 }} 
+  className="w-full flex-1 relative z-20"
+>
+  {/* px-2 ya px-3 add karne se dono taraf barabar margin mil jayega */}
+  <div className="bg-white/5 backdrop-blur-md rounded-xl md:rounded-full p-1 border border-white/10 flex items-center shadow-lg px-2 md:px-3">
+    
+    {/* 1. Left Section: NTPC Logo (Start) */}
+    <div className="flex-1 flex items-center gap-1 md:gap-2 justify-start"> 
+      <img 
+        src="/addmission slip logo/ntpc.jpeg" 
+        alt="NTPC" 
+        className="h-8 md:h-11 w-auto object-contain" 
+        onError={(e) => { e.target.src = 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Placeholder_logo.svg'; }} 
+      />
+      <span className="hidden lg:block font-black text-white text-[9px] md:text-[11px] uppercase tracking-tighter leading-tight">
+        NTPC <br/> Limited
+      </span>
+    </div>
+
+    {/* 2. Center Section: MAITI (Fixed) */}
+    <div className="flex-none flex items-center gap-1.5 md:gap-2 px-2 md:px-6 border-x border-white/10">
+      <span className="hidden sm:block font-black text-white text-[9px] md:text-[11px] uppercase tracking-tighter text-right leading-none">
+        MAITI <br className="md:hidden" /> Institute
+      </span>
+      <img 
+        src="/addmission slip logo/maiti.png" 
+        alt="MAITI" 
+        className="h-6 md:h-8 w-auto object-contain rounded-sm" 
+        onError={(e) => { e.target.src = 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Placeholder_logo.svg'; }} 
+      />
+    </div>
+
+    {/* 3. Right Section: Tool Room Logo (End) */}
+    <div className="flex-1 flex items-center gap-1 md:gap-2 justify-end">
+      <span className="hidden lg:block font-black text-white text-[9px] md:text-[11px] uppercase tracking-tighter leading-tight text-right">
+        TOOL <br/> ROOM
+      </span>
+      <img 
+        src="/addmission slip logo/TOOL ROOM.jpeg" 
+        alt="TOOL ROOM" 
+        className="h-8 md:h-11 w-auto object-contain rounded-sm" 
+        onError={(e) => { e.target.src = 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Placeholder_logo.svg'; }} 
+      />
+    </div>
+
+  </div>
+</motion.div>
       <div className="navbar bg-[#0b2a4a] h-20 text-white px-4 md:px-6 shadow-lg">
         {/* Logo Section */}
         <div className="flex-1">
