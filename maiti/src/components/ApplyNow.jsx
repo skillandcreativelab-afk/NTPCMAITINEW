@@ -5,6 +5,10 @@ import {
   FaPhoneAlt, FaIdCard, FaCamera, FaCheckCircle, FaRocket, FaGlobeAmericas, FaPrint
 } from "react-icons/fa";
 
+// Logo Paths (Public folder mein ye files honi chahiye)
+const ntpcLogo = "/ntpc_logo.png"; 
+const maitiLogo = "/maiti_logo.png";
+
 const PremiumInput = ({ label, name, icon, placeholder, isTextArea, type="text", value, onChange }) => (
   <motion.div whileHover={{ y: -2 }} className="space-y-2 w-full group">
     <label className="text-[12px] font-bold text-slate-500 uppercase tracking-[0.15em] ml-1 group-focus-within:text-indigo-600">
@@ -45,7 +49,7 @@ export default function ApplyNow() {
     return `MITI-${year}-${timePart}`;
   };
 
-  // --- NEW PRINT LOGIC (OLD LOGIC NOT CHANGED) ---
+  // --- PRINT SLIP LOGIC (BINAA LOGIC CHANGE KIYE) ---
   const handlePrintSlip = () => {
     const printWindow = window.open('', '_blank', 'width=800,height=900');
     printWindow.document.write(`
@@ -65,8 +69,7 @@ export default function ApplyNow() {
             .info-item { margin-bottom: 15px; }
             .label { font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase; }
             .value { font-size: 16px; font-weight: bold; color: #1e293b; }
-            .footer { margin-top: 50px; text-align: center; font-size: 10px; color: #94a3b8; border-top: 1px solid #eee; pt: 20px; }
-            @media print { .no-print { display: none; } }
+            .footer { margin-top: 50px; text-align: center; font-size: 10px; color: #94a3b8; border-top: 1px solid #eee; padding-top: 20px; }
           </style>
         </head>
         <body>
@@ -76,20 +79,17 @@ export default function ApplyNow() {
               <p class="logo-text">TRAINING INSTITUTE</p>
               <p class="subtitle">BARKAGAON, HAZARIBAGH</p>
             </div>
-            
             <div class="reg-box">
               <div class="reg-label">Application Registration ID</div>
               <div class="reg-value">${regId}</div>
             </div>
-
             <div class="info-grid">
               <div class="info-item"><div class="label">Student Name</div><div class="value">${submittedData?.name}</div></div>
               <div class="info-item"><div class="label">Father's Name</div><div class="value">${submittedData?.fatherName}</div></div>
               <div class="info-item"><div class="label">Contact Number</div><div class="value">${submittedData?.mobile}</div></div>
-              <div class="info-item"><div class="label">Aadhar ID</div><div class="value">${submittedData?.studentId}</div></div>
+              <div class="info-item"><div class="label">Qualification</div><div class="value">${submittedData?.qualification}</div></div>
               <div class="info-item" style="grid-column: span 2;"><div class="label">Address</div><div class="value">${submittedData?.address}</div></div>
             </div>
-
             <div class="footer">
               <p>This is a system generated enrollment slip for NTPC-MITI Barkagaon.</p>
               <p>Date of Issue: ${new Date().toLocaleDateString()}</p>
@@ -133,13 +133,14 @@ export default function ApplyNow() {
   };
 
   return (
-    <div className="min-h-screen bg-[#020617] flex items-center justify-center py-16 px-4 relative overflow-hidden">
-      {/* Design Elements */}
+    <div className="min-h-screen bg-[#050c2b] flex flex-col items-center justify-center py-16 px-4 relative overflow-hidden">
+      {/* Background Glows */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-20">
         <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-indigo-600 blur-[120px] rounded-full"></div>
         <div className="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-blue-600 blur-[120px] rounded-full"></div>
       </div>
 
+      {/* Success Modal */}
       <AnimatePresence>
         {isSubmitted && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
@@ -153,7 +154,6 @@ export default function ApplyNow() {
                 <p className="text-xl font-black text-indigo-400 font-mono tracking-widest">{regId}</p>
               </div>
 
-              {/* ACTION BUTTONS */}
               <div className="space-y-3">
                 <button 
                   onClick={handlePrintSlip}
@@ -161,7 +161,6 @@ export default function ApplyNow() {
                 >
                   <FaPrint className="text-lg" /> Download / Print Slip
                 </button>
-                
                 <button 
                   onClick={() => setIsSubmitted(false)} 
                   className="w-full bg-slate-100 text-slate-600 py-4 rounded-xl font-black text-xs uppercase hover:bg-slate-200 transition-all"
@@ -174,43 +173,68 @@ export default function ApplyNow() {
         )}
       </AnimatePresence>
 
+      {/* 1. TOP LOGO CONTAINER */}
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }} 
+        animate={{ opacity: 1, y: 0 }} 
+        className="max-w-6xl w-full mb-8 relative z-20"
+      >
+        <div className="bg-green-700 backdrop-blur-xl rounded-2xl md:rounded-full p-4 border border-white/10 flex items-center justify-between shadow-2xl">
+          <div className="flex items-center gap-3 pl-2">
+            <img src={'/addmission slip logo/ntpc.jpeg'} alt="NTPC" className="h-8 md:h-10 w-auto object-contain" onError={(e) => { e.target.src = 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Placeholder_logo.svg'; }} />
+            <span className="hidden sm:block font-black text-white text-sm md:text-lg uppercase tracking-tighter">NTPC Limited</span>
+          </div>
+
+          <div className="text-center">
+            <p className="text-[8px] md:text-[10px] text-cyan-300 font-black uppercase tracking-widest">Admission Enrollment</p>
+            <p className="text-[10px] md:text-xs text-white/100 font-bold tracking-tight italic">MAITI BARKAGAON</p>
+          </div>
+
+          <div className="flex items-center gap-3 pr-2">
+            <span className="hidden sm:block font-black text-white text-sm md:text-lg uppercase tracking-tighter">MAITI</span>
+            <img src={'/addmission slip logo/maiti.png'} alt="MAITI" className="h-8 md:h-10 w-auto object-contain rounded-lg" onError={(e) => { e.target.src = 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Placeholder_logo.svg'; }} />
+          </div>
+        </div>
+      </motion.div>
+
+      {/* 2. MAIN FORM BOX */}
       <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="max-w-6xl w-full relative z-10">
-        <div className="bg-white/5 backdrop-blur-xl rounded-[3.5rem] shadow-2xl overflow-hidden flex flex-col lg:flex-row border border-white/10 p-4">
+        <div className="bg-white/5 backdrop-blur-xl rounded-[2.5rem] md:rounded-[3.5rem] shadow-2x1 overflow-hidden flex flex-col lg:flex-row border border-green-600 p-4">
           
-          {/* Left Info Panel */}
-          <div className="lg:w-[38%] bg-gradient-to-br from-indigo-600 via-indigo-700 to-blue-800 rounded-[3rem] p-12 text-white flex flex-col justify-between">
+          {/* Left Panel */}
+          <div className="lg:w-[38%] bg-gradient-to-br from-indigo-600 via-indigo-700 to-blue-800 rounded-[2rem] md:rounded-[3rem] p-10 md:p-12 text-white flex flex-col justify-between">
             <div>
               <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center border border-white/20 mb-10 shadow-xl">
                  <FaGlobeAmericas className="text-3xl text-cyan-300" />
               </div>
-              <h2 className="text-3xl font-black leading-tight mb-6 tracking-tighter uppercase italic">
-                NTPC-MINING AND INDUSTRIAL <br/> TRAINING INSTITUTE <br/>
+              <h2 className="text-2xl md:text-3xl font-black leading-tight mb-6 tracking-tighter uppercase italic">
+                NTPC MINING AND INDUSTRIAL <br/> TRAINING INSTITUTE <br/>
                 <span className="text-cyan-300">BARKAGAON</span>
               </h2>
               <div className="h-1 w-20 bg-cyan-400 rounded-full"></div>
             </div>
             <div className="mt-12 bg-black/20 p-6 rounded-3xl border border-white/10">
                <p className="text-[10px] text-cyan-300 font-black uppercase mb-2">Support Line</p>
-               <p className="text-2xl font-black tracking-tight flex items-center gap-3">
+               <p className="text-xl md:text-2xl font-black tracking-tight flex items-center gap-3">
                  <FaPhoneAlt className="text-sm" /> 06531-299950
                </p>
             </div>
           </div>
 
-          {/* Right Form Panel */}
-          <div className="lg:w-[62%] p-8 md:p-14 bg-white rounded-[3rem]">
-            <form onSubmit={handleSubmit} className="space-y-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Right Form */}
+          <div className="lg:w-[62%] p-6 md:p-14 bg-white rounded-[2rem] md:rounded-[3rem]">
+            <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                 <PremiumInput label="Student Name" name="name" value={formData.name} icon={<FaUser/>} placeholder="Full Name" onChange={handleChange} />
                 <PremiumInput label="Father's Name" name="fatherName" value={formData.fatherName} icon={<FaUser/>} placeholder="Full Name" onChange={handleChange} />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-end">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-end">
                 <div className="space-y-3">
                   <label className="text-[12px] font-bold text-slate-500 uppercase tracking-widest ml-1">Gender</label>
                   <div className="flex bg-slate-50 p-1.5 rounded-2xl border-2 border-slate-100">
                     {["Male", "Female", "Other"].map((g) => (
-                      <label key={g} className="flex-1 text-center py-3 rounded-xl cursor-pointer text-[11px] font-black transition-all has-[:checked]:bg-indigo-600 has-[:checked]:text-white text-slate-400 uppercase">
+                      <label key={g} className="flex-1 text-center py-3 rounded-xl cursor-pointer text-[10px] font-black transition-all has-[:checked]:bg-indigo-600 has-[:checked]:text-white text-slate-600 uppercase">
                         <input type="radio" name="gender" value={g} checked={formData.gender === g} onChange={handleChange} className="hidden" required />
                         {g}
                       </label>
@@ -220,21 +244,21 @@ export default function ApplyNow() {
                 <PremiumInput label="Contact Number" name="mobile" value={formData.mobile} type="tel" icon={<FaPhoneAlt/>} placeholder="+91" onChange={handleChange} />
               </div>
 
-              <PremiumInput label="Address" name="address" value={formData.address} icon={<FaMapMarkerAlt/>} placeholder="House No, Village, Block, District" isTextArea onChange={handleChange} />
+              <PremiumInput label="Address" name="address" value={formData.address} icon={<FaMapMarkerAlt/>} placeholder="Village, Block, District" isTextArea onChange={handleChange} />
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                 <PremiumInput label="Qualification" name="qualification" value={formData.qualification} icon={<FaGraduationCap/>} placeholder="SSC / ITI" onChange={handleChange} />
                 <PremiumInput label="Aadhar ID" name="studentId" value={formData.studentId} icon={<FaIdCard/>} placeholder="0000 0000 0000" onChange={handleChange} />
               </div>
 
-              <div className="relative bg-slate-50 border-2 border-dashed border-slate-200 rounded-2xl p-10 flex flex-col items-center justify-center gap-3 group">
-                <FaCamera className="text-slate-400 group-hover:text-indigo-600 transition-colors" size={24} />
-                <span className="text-[11px] font-black text-slate-500 uppercase tracking-widest">Upload Passport Photo</span>
+              <div className="relative bg-slate-50 border-2 border-dashed border-green-400 rounded-2xl p-8 flex flex-col items-center justify-center gap-3 group">
+                <FaCamera className="text-black-400 group-hover:text-indigo-600 transition-colors" size={24} />
+                <span className="text-[11px] font-black text-slate-500 uppercase tracking-widest text-center">Upload Passport Photo</span>
                 <input type="file" name="photo" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer" onChange={handleChange} required />
                 {formData.photo && <span className="text-green-500 text-[10px] font-bold uppercase tracking-widest">Photo Ready ✓</span>}
               </div>
 
-              <button disabled={loading} className={`w-full py-6 rounded-2xl font-black text-xs uppercase tracking-[0.4em] text-white flex items-center justify-center gap-4 transition-all ${loading ? 'bg-slate-300' : 'bg-gradient-to-r from-indigo-600 to-blue-600 hover:shadow-xl'}`}>
+              <button disabled={loading} className={`w-full py-5 md:py-6 rounded-2xl font-black text-xs uppercase tracking-[0.4em] text-white flex items-center justify-center gap-4 transition-all ${loading ? 'bg-slate-300' : 'bg-gradient-to-r from-indigo-600 to-blue-600 hover:shadow-xl active:scale-[0.98]'}`}>
                 {loading ? "PROCESSING..." : <>Submit Enrollment <FaRocket className="text-lg" /></>}
               </button>
             </form>
