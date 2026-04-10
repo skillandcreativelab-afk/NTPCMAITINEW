@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import React from "react"; // React import karein Fragments ke liye
 import { FaDownload, FaChevronDown, FaChevronUp, FaEnvelope, FaChalkboardTeacher } from "react-icons/fa";
 
 export default function Courses() {
@@ -10,7 +11,6 @@ export default function Courses() {
 
   const [currentSlide, setCurrentSlide] = useState(0);
   const [openTrade, setOpenTrade] = useState(null);
-  const [openCourse, setOpenCourse] = useState(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -51,7 +51,7 @@ export default function Courses() {
         {/* 2. Trade Highlight Cards */}
         <div className="grid md:grid-cols-3 gap-8 mb-20">
           {trades.map((trade, index) => (
-            <div key={index} className="group relative rounded-3xl overflow-hidden shadow-xl h-64 cursor-pointer">
+            <div key={`highlight-${index}`} className="group relative rounded-3xl overflow-hidden shadow-xl h-64 cursor-pointer">
               <img src="/home slide pic/courses slide image/3.jpg" alt={trade.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
               <div className="absolute inset-0 bg-gradient-to-t from-blue-900/90 to-transparent flex flex-col justify-end p-6">
                 <h3 className="text-2xl font-bold text-white uppercase">{trade.name}</h3>
@@ -81,8 +81,9 @@ export default function Courses() {
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {trades.map((trade, index) => (
-                    <>
-                      <tr key={index} className="hover:bg-blue-50/50 transition-colors">
+                    // FIXED: Yahan React.Fragment use kiya hai taaki key sahi se kaam kare
+                    <React.Fragment key={`trade-row-${index}`}>
+                      <tr className="hover:bg-blue-50/50 transition-colors">
                         <td className="px-6 py-5 font-bold text-slate-700">{trade.name}</td>
                         <td className="px-6 py-5 text-slate-600 font-medium">{trade.incharge}</td>
                         <td className="px-6 py-5">
@@ -110,7 +111,7 @@ export default function Courses() {
                           </td>
                         </tr>
                       )}
-                    </>
+                    </React.Fragment>
                   ))}
                 </tbody>
               </table>
@@ -118,14 +119,14 @@ export default function Courses() {
           </div>
         </section>
 
-        {/* 4. Short Term Courses Card Grid (Better than Table) */}
+        {/* 4. Short Term Courses Section */}
         <section className="mb-20">
           <h2 className="text-3xl font-black text-slate-800 mb-8 flex items-center gap-4">
             <span className="w-10 h-1 bg-red-600 inline-block"></span> Short Term Training
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
             {shortCourses.map((course, index) => (
-              <div key={index} className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-xl hover:shadow-blue-100 transition-all border-b-4 border-b-blue-600">
+              <div key={`short-${index}`} className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-xl hover:shadow-blue-100 transition-all border-b-4 border-b-blue-600">
                 <h3 className="text-xl font-bold text-slate-800 mb-3">{course.name}</h3>
                 <p className="text-slate-500 text-sm mb-6 leading-relaxed">{course.description}</p>
                 <div className="flex items-center justify-between border-t pt-4 border-slate-50">

@@ -69,6 +69,9 @@ function App() {
           <Route path="/trainees/yearwise" element={<Yearwise />} />
           <Route path="/trainees/placement" element={<Placement />} />
           <Route path="/trainees/achievements" element={<Achievements />} />
+
+          {/* --- PROTECTED ADMIN ROUTE --- */}
+          {/* Ye ab sirf tabhi khulega jab admin login hoga, warna ye login logic par redirect karega */}
           <Route
             path="/trainees/adminpage"
             element={
@@ -80,7 +83,6 @@ function App() {
 
           {/* ...................................for pdf.......................... */}
           <Route path="/Istdpdf" element={<Istdpdf />} />
-          {/* <Route path="/gallery" element={<Gallery />} /> */}
         </Routes>
       </div>
       <Footer />

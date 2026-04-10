@@ -13,11 +13,46 @@ import {
 import { motion } from "framer-motion";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+// Pehle se maujood imports ke saath inhein bhi jodein
+import { FaCalendarAlt } from "react-icons/fa";
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
 
 function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [showMore, setShowMore] = useState(false); // Vision toggle state
+  // Home function ke start mein
+  const [openLightbox, setOpenLightbox] = useState(false);
+  const [photoIndex, setPhotoIndex] = useState(0);
+
+  const eventGallery = [
+    {
+      date: "31-03-2024",
+      title: "VBU Images Visit",
+      img: "/home slide pic/building.jpeg",
+    },
+    {
+      date: "15-04-2024",
+      title: "Main Campus View",
+      img: "/home slide pic/main building.jpeg",
+    },
+    {
+      date: "20-05-2024",
+      title: "Welding Workshop",
+      img: "/home slide pic/welder.jpeg",
+    },
+    {
+      date: "12-06-2024",
+      title: "Industrial Visit",
+      img: "/home slide pic/building.jpeg",
+    },
+  ];
 
   const slides = [
     "/home slide pic/building.jpeg",
@@ -195,22 +230,41 @@ function Home() {
       </div>
 
       {/* --- Job & Training Section --- */}
-      <div className="max-w-8xl mx-auto px-6 py-20 bg-gradient-to-br from-[#fff5f0] via-[#fee2e2] to-[#fecaca] border-y border-red-100 shadow-inner">
+      {/* --- CAREER PATHWAY HEADER WITH BLURRED BG IMAGE --- */}
+      <div className="max-w-8xl mx-auto px-6 py-20 bg-gradient-to-br from-[#0a0642] via-[#c2ebf8] to-[#fecaca] border-y border-red-100 shadow-inner">
         <div
-          className="lg:mx-[30px] mb-16 bg-white rounded-3xl py-12 px-6 border border-slate-100 shadow-[0_20px_30px_rgba(0,0,0,0.05)] hover:shadow-[0_30px_60px_rgba(1,0,1,0.1)] transition-all duration-500 text-center group"
+          className="relative lg:mx-[30px] mb-16 rounded-3xl py-12 px-6 border border-white/20 shadow-[0_20px_30px_rgba(0,0,0,0.05)] hover:shadow-[0_30px_60px_rgba(1,0,1,0.1)] transition-all duration-500 text-center group overflow-hidden"
           data-aos="fade-up"
         >
-          <h2 className="text-sm font-black text-blue-600 uppercase tracking-[0.4em] mb-4">
-            {" "}
-            Career Pathway{" "}
-          </h2>
-          <h3 className="text-4xl md:text-5xl font-black text-slate-800 uppercase italic tracking-tighter group-hover:text-blue-700 transition-colors">
-            {" "}
-            Job & Training Portals{" "}
-          </h3>
-          <div className="h-2 w-24 bg-red-600 mx-auto mt-6 rounded-full shadow-md group-hover:w-40 transition-all duration-500"></div>
-        </div>
+          {/* 1. BLURRED IMAGE LAYER */}
+          <div
+            className="absolute inset-0 z-0 transition-transform duration-1000 group-hover:scale-110"
+            style={{
+              backgroundImage: `url('public/about us.jpeg')`, // Yahan apni image ka path dalein
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              filter: "blur(12px)", // Image ko blur karne ke liye
+              transform: "scale(1.1)", // Taaki edges white na dikhein
+            }}
+          ></div>
 
+          {/* 2. SOFT OVERLAY (Taaki text clear dikhe) */}
+          <div className="absolute inset-0 bg-white/40 z-0 backdrop-blur-sm"></div>
+
+          {/* 3. CONTENT (Relative z-10 taaki blur ke upar rahe) */}
+          <div className="relative z-10">
+            <h2 className="text-sm font-black text-blue-700 uppercase tracking-[0.4em] mb-4 drop-shadow-sm">
+              Career Pathway
+            </h2>
+            <h3 className="text-6xl md:text-5xl font-black text-slate-900 uppercase italic tracking-tighter group-hover:text-blue-800 transition-colors drop-shadow-sm">
+              Job & Training Portals
+            </h3>
+            <div className="h-2 w-24 bg-red-600 mx-auto mt-6 rounded-full shadow-md group-hover:w-40 transition-all duration-500"></div>
+          </div>
+        </div>
+        
+
+        {/* --- GRIDS SECTION (SAME AS BEFORE) --- */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           {[
             {
@@ -263,7 +317,7 @@ function Home() {
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.8, delay: i * 0.2 }}
               whileHover={{ y: -10 }}
-              className="relative bg-white p-10 rounded-[2.5rem] shadow-[0_15px_40px_rgba(0,0,0,0.06)] border border-slate-100 hover:shadow-[0_25px_60px_rgba(200,69,0,0.8)] transition-all duration-500 flex flex-col justify-between group overflow-hidden"
+              className="relative bg-white p-10 rounded-[2.5rem] shadow-[0_15px_40px_rgba(0,0,0,0.06)] border border-blue-500 hover:shadow-[0_10px_40px_rgba(15,23,52,0.5)] transition-all duration-500 flex flex-col justify-between group overflow-hidden"
             >
               <div>
                 <div
@@ -302,6 +356,45 @@ function Home() {
         </div>
       </div>
 
+
+       {/* --- PROFESSIONAL COMBINED NEWS MARQUEE (ENGLISH) --- */}
+{/* --- FIXED NEWS MARQUEE (NO ERROR CODE) --- */}
+<div className="max-w-7xl mx-auto px-6 mb-12">
+  <div className="relative group overflow-hidden bg-gradient-to-r from-[#002b49] via-[#004e82] to-[#002b49] py-4 rounded-2xl shadow-xl border-l-8 border-yellow-400">
+    
+    {/* Updates Label */}
+    <div className="absolute left-0 top-0 bottom-0 px-5 bg-yellow-400 flex items-center z-20 rounded-r-xl shadow-lg">
+      <span className="text-blue-900 font-black italic uppercase tracking-tighter text-xs flex items-center gap-2">
+        <span className="w-2 h-2 bg-red-600 rounded-full animate-ping"></span>
+        Updates
+      </span>
+    </div>
+
+    {/* TICKER CONTENT - Fixed with currentTarget */}
+    <marquee 
+      behavior="scroll" 
+      direction="left" 
+      scrollamount="7" 
+      onMouseOver={(e) => e.currentTarget.stop()} // Fixed: target ki jagah currentTarget
+      onMouseOut={(e) => e.currentTarget.start()} // Fixed: target ki jagah currentTarget
+      className="cursor-pointer"
+    >
+      <div className="flex items-center gap-20">
+        <span className="text-white font-black uppercase italic tracking-widest text-sm flex items-center gap-4">
+          <span className="bg-red-600 text-white px-2 py-0.5 rounded not-italic text-[10px] font-black">LIVE</span>
+          🚀 2026 CAREER HUB: Attempt Online Mock Tests, Check Latest Notice Board Results, and Access Quick Links for e-Kalyan & NCVT MIS Portals!
+        </span>
+
+        <span className="text-white font-black uppercase italic tracking-widest text-sm flex items-center gap-4">
+          <span className="bg-green-500 text-white px-2 py-0.5 rounded not-italic text-[10px] font-black">NEW</span>
+          ⚡ STAY UPDATED: All-in-one access for Technical Training, Scholarship Updates, and Government Portals — Click to Explore Below!
+        </span>
+      </div>
+    </marquee>
+
+    <div className="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-[#002b49] to-transparent z-10 pointer-events-none"></div>
+  </div>
+</div>
       {/* --- Main Container: Sab kuch iske andar rahega --- */}
       <div className="max-w-7xl mx-auto px-6 pb-24 grid grid-cols-1 lg:grid-cols-3 gap-10">
         {/* 1. Quick Access Box */}
@@ -436,7 +529,9 @@ function Home() {
               ))}
             </div>
           </div>
+          
         </div>
+       
 
         {/* 4. Stats Box (Yeh automatically niche aayega agar 3 se zyada boxes hain) */}
         <div
@@ -588,7 +683,7 @@ function Home() {
       {/* ======================================================== */}
       {/* NEW SECTION: VICE CHAIRMAN'S MESSAGE (Top Trades ke Uper) */}
       {/* ======================================================== */}
-      <div className="max-w-7.5xl mx-auto px-6 py-20">
+      <div className="max-w-7xl mx-auto px-6 py-20">
         <div
           className="bg-gradient-to-br from-[#0f172a] via-[#cce2f7] to-[#1b3f14] rounded-[3rem] p-8 md:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-slate-700/50 flex flex-col lg:flex-row items-center gap-12 relative overflow-hidden group"
           data-aos="fade-up"
@@ -728,6 +823,101 @@ function Home() {
         </div>
       </div>
       {/* --- END NEW SECTION --- */}
+      {/* --- 5. LATEST EVENTS GALLERY SECTION --- */}
+      {/* --- 5. LATEST EVENTS GALLERY SECTION (FULL WIDTH SKY BG) --- */}
+      {/* --- 5. LATEST EVENTS GALLERY SECTION (FULL WIDTH SKY BG) --- */}
+      <section
+        className="relative w-full py-20 overflow-hidden"
+        style={{
+          background: `linear-gradient(to bottom, #74b9ff 0%, #b3e0ff 70%, #f8fafc 100%)`,
+        }}
+      >
+        {/* --- REALISTIC CLOUDS LAYER --- */}
+        <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
+          <div className="absolute top-[10%] left-[-5%] w-[400px] h-[120px] bg-white rounded-full blur-[80px] opacity-60 shadow-[200px_50px_100px_white]"></div>
+          <div className="absolute top-[15%] right-[-5%] w-[500px] h-[150px] bg-white rounded-full blur-[90px] opacity-50 shadow-[-150px_40px_100px_white]"></div>
+          <div className="absolute bottom-[20%] left-[30%] w-[600px] h-[100px] bg-white rounded-full blur-[100px] opacity-40"></div>
+        </div>
+
+        <div className="relative z-5 max-w-7x2 mx-auto px-6">
+          <div className="text-center mb-16" data-aos="fade-up">
+            <h2 className="text-4xl md:text-5xl font-black text-slate-900 uppercase italic tracking-tighter drop-shadow-md">
+              Latest <span className="text-blue-900">Events.</span>
+            </h2>
+            <div className="w-24 h-2 bg-blue-900 mx-auto mt-4 rounded-full shadow-lg"></div>
+          </div>
+
+          <div className="relative group">
+            <Swiper
+              modules={[Navigation, Pagination, Autoplay]}
+              spaceBetween={30}
+              slidesPerView={1}
+              loop={true}
+              autoplay={{ delay: 3000, disableOnInteraction: false }}
+              navigation={{ nextEl: ".gallery-next", prevEl: ".gallery-prev" }}
+              breakpoints={{
+                640: { slidesPerView: 2 },
+                1024: { slidesPerView: 3 },
+              }}
+              className="!pb-16"
+            >
+              {eventGallery.map((event, i) => (
+                <SwiperSlide key={i}>
+                  <motion.div
+                    whileHover={{ y: -10 }}
+                    className="relative h-[400px] rounded-3xl overflow-hidden shadow-2xl cursor-pointer group/card border border-white/40"
+                    // YAHAN CLICK KA FUNCTION HAI
+                    onClick={() => {
+                      setPhotoIndex(i);
+                      setOpenLightbox(true);
+                    }}
+                  >
+                    <img
+                      src={event.img}
+                      alt={event.title}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-110"
+                    />
+
+                    <div className="absolute bottom-0 left-0 w-full h-[100px] bg-[#002b49]/95 flex flex-col justify-center px-8 transition-all duration-500 ease-in-out group-hover/card:h-full group-hover/card:bg-[#002b49]/85 group-hover/card:items-center group-hover/card:text-center">
+                      <div className="flex items-center gap-1 mb-2 group-hover/card:justify-center">
+                        <FaCalendarAlt className="text-yellow-400 text-xs" />
+                        <span className="text-white/70 font-black text-[10px] uppercase tracking-widest">
+                          {event.date}
+                        </span>
+                      </div>
+                      <h3 className="text-xl font-black text-white uppercase leading-tight group-hover/card:text-2xl group-hover/card:text-yellow-400 transition-colors">
+                        {event.title}
+                      </h3>
+                      <div className="mt-6 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500">
+                        <span className="px-6 py-2 border-2 border-white/20 text-white text-xs font-black uppercase tracking-tighter hover:bg-white hover:text-blue-900 rounded-lg whitespace-nowrap">
+                          View Full Image
+                        </span>
+                      </div>
+                    </div>
+                  </motion.div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+
+            <button className="gallery-prev absolute left-[-15px] top-1/2 -translate-y-1/2 z-30 bg-white shadow-2xl p-4 rounded-full text-blue-950 hover:bg-blue-950 hover:text-white transition-all hidden xl:block">
+              <FaArrowRight className="rotate-180" />
+            </button>
+            <button className="gallery-next absolute right-[-15px] top-1/2 -translate-y-1/2 z-30 bg-white shadow-2xl p-4 rounded-full text-blue-950 hover:bg-blue-950 hover:text-white transition-all hidden xl:block">
+              <FaArrowRight />
+            </button>
+          </div>
+        </div>
+
+        {/* --- YE LIGHTBOX COMPONENT HONA ZAROORI HAI --- */}
+        {openLightbox && (
+          <Lightbox
+            open={openLightbox}
+            close={() => setOpenLightbox(false)}
+            index={photoIndex}
+            slides={eventGallery.map((e) => ({ src: e.img }))}
+          />
+        )}
+      </section>
 
       {/* ======================================================== */}
       {/* NEW SECTION: WELCOME TO NTPC MAITI (Just below VC Message) */}
@@ -792,16 +982,28 @@ function Home() {
       {/* --- END WELCOME SECTION --- */}
 
       {/* --- Top Trades --- */}
-      <div className="bg-slate-50 py-24 px-6 border-t border-slate-100">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16" data-aos="fade-up">
-            <h2 className="text-5xl font-black text-slate-900 tracking-tighter uppercase italic">
-              {" "}
-              Our <span className="text-blue-600">Top Trades</span>{" "}
+      {/* --- OUR TOP TRADES SECTION (FIXED WITH LINK) --- */}
+      <section
+        className="relative w-full py-12 overflow-hidden"
+        style={{
+          background: `linear-gradient(to bottom, #e0f2fe 0%, #ffffff 100%)`,
+        }}
+      >
+        {/* BACKGROUND CLOUDS */}
+        <div className="absolute top-0 left-0 w-full h-40 pointer-events-none z-0">
+          <div className="absolute top-[-20px] left-[10%] w-[300px] h-[100px] bg-white rounded-full blur-[60px] opacity-80"></div>
+          <div className="absolute top-[-10px] right-[5%] w-[400px] h-[120px] bg-white rounded-full blur-[80px] opacity-70"></div>
+        </div>
+
+        <div className="relative z-10 max-w-7xl mx-auto px-6">
+          <div className="text-center mb-10" data-aos="fade-up">
+            <h2 className="text-3xl md:text-4xl font-black text-slate-800 uppercase italic tracking-tighter">
+              Our <span className="text-blue-700">Top Trades.</span>
             </h2>
-            <div className="w-20 h-2 bg-red-600 mx-auto mt-4 rounded-full"></div>
+            <div className="w-16 h-1.5 bg-blue-700 mx-auto mt-3 rounded-full"></div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
                 t: "Electrician",
@@ -819,39 +1021,45 @@ function Home() {
                 dur: "1 Year NCVT",
               },
             ].map((course, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 80 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: i * 0.2 }}
-                whileHover={{ scale: 1.03 }}
-                className="group relative h-[500px] rounded-[3rem] overflow-hidden shadow-xl bg-white"
-              >
-                <img
-                  src={course.img}
-                  alt={course.t}
-                  className="w-full h-full object-cover transition-all duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent flex flex-col justify-end p-8">
-                  <span className="text-yellow-400 font-black text-xs uppercase tracking-widest mb-2">
-                    {" "}
-                    {course.dur}{" "}
-                  </span>
-                  <h3 className="text-white text-3xl font-black mb-6 italic uppercase tracking-tighter">
-                    {" "}
-                    {course.t}{" "}
-                  </h3>
-                  <button className="w-full bg-white text-slate-900 py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all shadow-lg">
-                    {" "}
-                    Trade Info{" "}
-                  </button>
-                </div>
-              </motion.div>
+              // AB YE LINK BAN GAYA HAI, YE ZAROOR KAAM KAREGA
+              <Link to="/courses" key={i} className="block group">
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -10 }}
+                  className="relative h-[420px] rounded-[2.5rem] overflow-hidden shadow-lg cursor-pointer border border-white/60"
+                >
+                  {/* Trade Image */}
+                  <img
+                    src={course.img}
+                    alt={course.t}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+
+                  {/* BLUE OVERLAY */}
+                  <div className="absolute bottom-0 left-0 w-full h-[90px] bg-[#002b49]/95 flex flex-col justify-center px-6 transition-all duration-500 ease-in-out group-hover:h-full group-hover:bg-[#002b49]/85 group-hover:items-center group-hover:text-center">
+                    <span className="text-yellow-400 font-bold text-[10px] uppercase tracking-widest mb-1">
+                      {course.dur}
+                    </span>
+
+                    <h3 className="text-xl font-black text-white uppercase leading-tight group-hover:text-2xl group-hover:text-yellow-400 transition-colors italic">
+                      {course.t}
+                    </h3>
+
+                    {/* View Info Button */}
+                    <div className="mt-5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 w-full max-w-[200px]">
+                      <div className="py-2 border border-white/30 text-white text-[10px] font-black uppercase tracking-widest rounded-xl text-center">
+                        Click to View Details
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              </Link>
             ))}
           </div>
         </div>
-      </div>
+      </section>
     </section>
   );
 }
