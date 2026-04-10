@@ -45,6 +45,63 @@ export default function ApplyNow() {
     return `MITI-${year}-${timePart}`;
   };
 
+  // --- NEW PRINT LOGIC (OLD LOGIC NOT CHANGED) ---
+  const handlePrintSlip = () => {
+    const printWindow = window.open('', '_blank', 'width=800,height=900');
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Registration Slip - NTPC MAITI</title>
+          <style>
+            body { font-family: 'Segoe UI', sans-serif; padding: 30px; color: #333; }
+            .slip-card { border: 4px double #4f46e5; padding: 40px; border-radius: 20px; max-width: 600px; margin: auto; }
+            .header { text-align: center; border-bottom: 2px solid #eee; padding-bottom: 20px; }
+            .logo-text { font-size: 24px; font-weight: 900; color: #1e1b4b; margin: 0; }
+            .subtitle { font-size: 14px; color: #6366f1; font-weight: bold; margin-top: 5px; }
+            .reg-box { background: #f8fafc; border: 2px dashed #cbd5e1; padding: 20px; text-align: center; margin: 25px 0; border-radius: 15px; }
+            .reg-label { font-size: 10px; font-weight: bold; color: #64748b; text-transform: uppercase; }
+            .reg-value { font-size: 28px; font-weight: 900; color: #4f46e5; font-family: monospace; }
+            .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; }
+            .info-item { margin-bottom: 15px; }
+            .label { font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase; }
+            .value { font-size: 16px; font-weight: bold; color: #1e293b; }
+            .footer { margin-top: 50px; text-align: center; font-size: 10px; color: #94a3b8; border-top: 1px solid #eee; pt: 20px; }
+            @media print { .no-print { display: none; } }
+          </style>
+        </head>
+        <body>
+          <div class="slip-card">
+            <div class="header">
+              <p class="logo-text">NTPC-MINING & INDUSTRIAL</p>
+              <p class="logo-text">TRAINING INSTITUTE</p>
+              <p class="subtitle">BARKAGAON, HAZARIBAGH</p>
+            </div>
+            
+            <div class="reg-box">
+              <div class="reg-label">Application Registration ID</div>
+              <div class="reg-value">${regId}</div>
+            </div>
+
+            <div class="info-grid">
+              <div class="info-item"><div class="label">Student Name</div><div class="value">${submittedData?.name}</div></div>
+              <div class="info-item"><div class="label">Father's Name</div><div class="value">${submittedData?.fatherName}</div></div>
+              <div class="info-item"><div class="label">Contact Number</div><div class="value">${submittedData?.mobile}</div></div>
+              <div class="info-item"><div class="label">Aadhar ID</div><div class="value">${submittedData?.studentId}</div></div>
+              <div class="info-item" style="grid-column: span 2;"><div class="label">Address</div><div class="value">${submittedData?.address}</div></div>
+            </div>
+
+            <div class="footer">
+              <p>This is a system generated enrollment slip for NTPC-MITI Barkagaon.</p>
+              <p>Date of Issue: ${new Date().toLocaleDateString()}</p>
+            </div>
+          </div>
+          <script>window.print();</script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -90,11 +147,28 @@ export default function ApplyNow() {
               <FaCheckCircle className="text-green-500 text-6xl mx-auto mb-6" />
               <h2 className="text-2xl font-black text-slate-900 uppercase">Success!</h2>
               <p className="text-slate-500 mb-6 font-bold uppercase text-[10px] tracking-widest">Registration Completed</p>
-              <div className="mb-8 bg-slate-900 p-5 rounded-2xl shadow-inner">
+              
+              <div className="mb-8 bg-slate-900 p-5 rounded-2xl shadow-inner text-center">
                 <p className="text-[10px] font-bold text-slate-400 uppercase mb-1">Registration ID</p>
                 <p className="text-xl font-black text-indigo-400 font-mono tracking-widest">{regId}</p>
               </div>
-              <button onClick={() => setIsSubmitted(false)} className="w-full bg-indigo-600 text-white py-4 rounded-xl font-black text-xs uppercase hover:bg-indigo-700 shadow-lg">Close</button>
+
+              {/* ACTION BUTTONS */}
+              <div className="space-y-3">
+                <button 
+                  onClick={handlePrintSlip}
+                  className="w-full bg-emerald-500 text-white py-4 rounded-xl font-black text-xs uppercase hover:bg-emerald-600 shadow-lg flex items-center justify-center gap-3 transition-all active:scale-95"
+                >
+                  <FaPrint className="text-lg" /> Download / Print Slip
+                </button>
+                
+                <button 
+                  onClick={() => setIsSubmitted(false)} 
+                  className="w-full bg-slate-100 text-slate-600 py-4 rounded-xl font-black text-xs uppercase hover:bg-slate-200 transition-all"
+                >
+                  Close Window
+                </button>
+              </div>
             </motion.div>
           </motion.div>
         )}
@@ -110,7 +184,7 @@ export default function ApplyNow() {
                  <FaGlobeAmericas className="text-3xl text-cyan-300" />
               </div>
               <h2 className="text-3xl font-black leading-tight mb-6 tracking-tighter uppercase italic">
-                NTPC-MINING & INDUSTRIAL <br/> TRAINING INSTITUTE <br/>
+                NTPC-MINING AND INDUSTRIAL <br/> TRAINING INSTITUTE <br/>
                 <span className="text-cyan-300">BARKAGAON</span>
               </h2>
               <div className="h-1 w-20 bg-cyan-400 rounded-full"></div>
